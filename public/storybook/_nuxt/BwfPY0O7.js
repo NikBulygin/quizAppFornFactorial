@@ -1,0 +1,1 @@
+import{c as s,o as a,a as n}from"./B8fsviwg.js";import{_ as r}from"./DlAUqK2U.js";const o={};function t(c,e){return a(),s("div",null,e[0]||(e[0]=[n("h1",null,"Hello World",-1)]))}const p=r(o,[["render",t]]);o.__docgenInfo={displayName:"pages",description:"",tags:{},sourceFiles:["/home/BNik_ssh/quizzapp/app/pages/index.vue"]};export{p as default};
