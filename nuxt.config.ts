@@ -6,9 +6,31 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/ui',
     '@nuxt/image',
-    '@nuxtjs/storybook'
+    '@nuxtjs/storybook',
+    'nuxt-auth-utils'
   ],
   css: ['~/assets/css/main.css'],
+  runtimeConfig: {
+    // Auth0 configuration (using existing .env variables)
+    oauth: {
+      auth0: {
+        clientSecret: process.env.NUXT_OAUTH_AUTH0_CLIENT_SECRET,
+        domain: process.env.NUXT_OAUTH_AUTH0_DOMAIN,
+        clientId: process.env.NUXT_OAUTH_AUTH0_CLIENT_ID,
+      }
+    },
+    public: {
+      oauth: {
+        auth0: {
+          clientId: process.env.NUXT_OAUTH_AUTH0_CLIENT_ID,
+          domain: process.env.NUXT_OAUTH_AUTH0_DOMAIN,
+        }
+      }
+    },
+    session: {
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+    }
+  },
   nitro: {
     publicAssets: [
       {
