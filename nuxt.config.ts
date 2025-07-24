@@ -10,6 +10,9 @@ export default defineNuxtConfig({
     'nuxt-auth-utils'
   ],
   css: ['~/assets/css/main.css'],
+  alias: {
+    '~/types': './types'
+  },
   runtimeConfig: {
     // Auth0 configuration (using existing .env variables)
     oauth: {
@@ -19,6 +22,11 @@ export default defineNuxtConfig({
         clientId: process.env.NUXT_OAUTH_AUTH0_CLIENT_ID,
       }
     },
+    // Auth0 Machine-to-Machine configuration for Management API
+    auth0: {
+      m2mClientId: process.env.NUXT_AUTH0_M2M_CLIENT_ID || 'XA1vRtIYJWmOmqb3Syh15ZN8KupPuZIN',
+      m2mClientSecret: process.env.NUXT_AUTH0_M2M_CLIENT_SECRET || 'w8nA8EV-NgXXHQGDGfINkoqkcIHyuYA8roHoS0EQiALOLEHYMTqA27fbDfK_huQ9',
+    },
     public: {
       oauth: {
         auth0: {
@@ -26,9 +34,6 @@ export default defineNuxtConfig({
           domain: process.env.NUXT_OAUTH_AUTH0_DOMAIN,
         }
       }
-    },
-    session: {
-      maxAge: 60 * 60 * 24 * 7, // 1 week
     }
   },
   nitro: {
