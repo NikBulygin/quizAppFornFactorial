@@ -21,7 +21,5 @@
   --color-green-950: #052E16;
 }
 
-/* Custom UI variables for theme customization */
 :root {
-  --ui-radius: 0.375rem;
 } 
