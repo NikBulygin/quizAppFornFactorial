@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
-import LogoComponent from './index.vue'
+import AiTestGenerator from './AiTestGenerator.vue'
 
-const meta: Meta<typeof LogoComponent> = {
-  title: 'Common/Logo',
-  component: LogoComponent,
+const meta: Meta<typeof AiTestGenerator> = {
+  title: 'AI/AiTestGenerator',
+  component: AiTestGenerator,
   parameters: {
     layout: 'padded'
   }
@@ -14,4 +14,4 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {}
-}
+} 

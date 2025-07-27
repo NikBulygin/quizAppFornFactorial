@@ -1,0 +1,56 @@
+# Зависимости
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Сборка
+.nuxt
+.output
+dist
+
+# Логи
+*.log
+
+# Временные файлы
+.tmp
+.temp
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Тесты
+coverage
+.nyc_output
+
+# Storybook
+storybook-static
+.storybook
+
+# Локальные файлы окружения
+.env.local
+.env.*.local
+
+# Кэш
+.cache
+.parcel-cache
+
+# Другие
+README.md
+*.md 
