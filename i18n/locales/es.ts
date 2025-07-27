@@ -1,0 +1,272 @@
+export default {
+  hello: 'Hola mundo',
+  language: {
+    selectTitle: 'Seleccionar idioma',
+    selectLanguage: 'Selecciona idioma',
+    selectDescription: 'Selecciona el idioma preferido de la interfaz'
+  },
+  home: {
+    timerExamples: 'Ejemplos de temporizadores',
+    countdownDeadline: 'Cuenta regresiva hasta la fecha límite',
+    countdownTimeLimit: 'Cuenta regresiva con límite de tiempo',
+    currentTime: 'Hora actual',
+    expiredTimer: 'Temporizador expirado',
+    warningActive: 'Advertencia activa',
+    noWarning: 'Sin advertencia',
+    questionExamples: 'Ejemplos de preguntas',
+    singleChoiceQuestion: 'Pregunta de opción única',
+    multipleChoiceQuestion: 'Pregunta de opción múltiple',
+    questionWithAnswers: 'Pregunta con respuestas',
+    questionWithImage: 'Pregunta con imagen',
+    testCreationExample: 'Ejemplo de creación de preguntas',
+    createQuestionForm: 'Formulario de creación de preguntas',
+    jsonPreview: 'Vista previa JSON',
+    copyJson: 'Copiar JSON',
+    questionsJson: 'JSON de preguntas'
+  },
+  timer: {
+    untilDeadline: 'hasta la fecha límite',
+    remaining: 'restante',
+    currentTime: 'hora actual',
+    timeRunningOut: '¡Se está agotando el tiempo!',
+    timeExpired: '¡Tiempo agotado!',
+    modes: {
+      countdown: 'Cuenta regresiva',
+      time: 'Hora actual'
+    },
+    types: {
+      deadline: 'Fecha límite',
+      timeLimit: 'Límite de tiempo'
+    },
+    settings: {
+      title: 'Configuración del temporizador',
+      editTitle: 'Editar temporizador',
+      mode: 'Modo del temporizador',
+      countdownType: 'Tipo de cuenta regresiva',
+      deadline: 'Fecha límite',
+      deadlineHelp: 'Tiempo HASTA el cual se debe entregar la prueba',
+      timeLimit: 'Tiempo de ejecución (minutos)',
+      timeLimitHelp: 'Cuánto tiempo se da para completar la prueba',
+      warnings: 'Advertencias',
+      showWarning: 'Mostrar advertencia de tiempo',
+      warningThreshold: 'Umbral de advertencia (segundos)',
+      displaySettings: 'Configuración de visualización',
+      showProgress: 'Mostrar barra de progreso de tiempo',
+      preview: 'Vista previa',
+      timeModeInfo: 'El temporizador mostrará la hora actual del día en formato HH:MM:SS',
+      actions: {
+        cancel: 'Cancelar',
+        save: 'Guardar',
+        apply: 'Aplicar',
+        delete: 'Eliminar',
+        preview: 'Vista previa'
+      }
+    }
+  },
+  question: {
+    difficulties: {
+      easy: 'Fácil',
+      medium: 'Medio',
+      hard: 'Difícil'
+    },
+    edit: {
+      title: 'Crear pregunta',
+      editTitle: 'Editar pregunta',
+      questionTitle: 'Pregunta',
+      questionTitlePlaceholder: 'Ingresa la pregunta',
+      description: 'Descripción',
+      descriptionPlaceholder: 'Descripción adicional de la pregunta',
+      difficulty: 'Dificultad',
+      selectDifficulty: 'Selecciona la dificultad',
+      points: 'Puntos',
+      image: 'Imagen',
+      addImageUrl: 'Agregar URL',
+      answers: {
+        title: 'Opciones de respuesta',
+        addAnswer: 'Agregar respuesta',
+        addPrompt: 'Agrega opciones de respuesta',
+        answerPlaceholder: 'Respuesta',
+        correctLabel: 'Correcta'
+      },
+      explanation: 'Explicación',
+      explanationPlaceholder: 'Explicación de la respuesta correcta',
+      imageUpload: {
+        title: 'Subir imagen',
+        or: 'o',
+        cancel: 'Cancelar',
+        apply: 'Aplicar'
+      },
+      actions: {
+        cancel: 'Cancelar',
+        save: 'Guardar',
+        create: 'Crear',
+        apply: 'Aplicar',
+        delete: 'Eliminar',
+        preview: 'Vista previa'
+      }
+    },
+    display: {
+      explanation: 'Explicación',
+      points: 'puntos'
+    }
+  },
+  navigation: {
+    title: 'Navegación del Test',
+    sections: 'Secciones',
+    questions: 'Preguntas',
+    progress: 'Progreso',
+    finishTest: 'Finalizar Test',
+    finishTestEarly: 'Finalizar Test Antes',
+    finish: 'Finalizar',
+    cancel: 'Cancelar',
+    back: 'Atrás',
+    confirmation: {
+      title: 'Confirmar Finalización del Test',
+      description: '¿Estás seguro de que quieres finalizar el test antes? Las preguntas sin responder se contarán como incorrectas.'
+    },
+    status: {
+      notAnswered: 'No respondida',
+      answered: 'Respondida',
+      correct: 'Correcta',
+      incorrect: 'Incorrecta'
+    }
+  },
+  test: {
+    edit: {
+      createTitle: 'Crear test',
+      editTitle: 'Editar test',
+      basicSettings: 'Configuración básica',
+      title: 'Título del test',
+      titlePlaceholder: 'Ingresa el título del test',
+      description: 'Descripción',
+      descriptionPlaceholder: 'Descripción del test',
+      image: 'Imagen',
+      timeSettings: 'Configuración de tiempo',
+      deadline: 'Fecha límite',
+      timeLimit: 'Límite de tiempo (minutos)',
+      timeLimitPlaceholder: '60',
+      timeLimitHelp: 'Tiempo permitido para completar el test',
+      randomizationSettings: 'Configuración de aleatorización',
+      randomizeQuestions: 'Aleatorizar orden de preguntas',
+      randomizeAnswers: 'Aleatorizar orden de respuestas',
+      difficultyDistribution: 'Distribución de dificultad',
+      totalPercentage: 'Porcentaje total',
+      resetDistribution: 'Restablecer distribución',
+      questionBank: 'Banco de preguntas',
+      addQuestion: 'Agregar pregunta',
+      filterByDifficulty: 'Filtrar por dificultad',
+      searchQuestions: 'Buscar preguntas',
+      selectedQuestions: 'Preguntas seleccionadas: {count}',
+      assignToSection: 'Asignar a sección',
+      assign: 'Asignar',
+      sections: 'Secciones',
+      addSection: 'Agregar sección',
+      questions: 'preguntas',
+      sectionTitle: 'Título de la sección',
+      sectionTitlePlaceholder: 'Ingresa el título de la sección',
+      sectionDescription: 'Descripción de la sección',
+      sectionDescriptionPlaceholder: 'Descripción de la sección',
+      allDifficulties: 'Todas las dificultades',
+      actions: {
+        cancel: 'Cancelar',
+        save: 'Guardar',
+        apply: 'Aplicar',
+        delete: 'Eliminar',
+        preview: 'Vista previa'
+      },
+      errors: {
+        titleRequired: 'El título del test es obligatorio'
+      }
+    },
+    pass: {
+      exit: 'Salir',
+      noQuestion: 'Pregunta no encontrada',
+      previous: 'Anterior',
+      next: 'Siguiente',
+      finish: 'Finalizar',
+      questionProgress: '{current} de {total}'
+    },
+    card: {
+      questions: 'preguntas',
+      minutes: 'minutos',
+      yourResult: 'Tu resultado',
+      completedAt: 'Completado el',
+      totalPoints: 'Puntos totales',
+      estimatedTime: 'Tiempo estimado',
+      passed: 'Aprobado',
+      failed: 'Reprobado',
+      attempts: 'intentos',
+      viewResult: 'Ver resultado',
+      retake: 'Repetir',
+      start: 'Comenzar',
+      expired: 'Expirado',
+      today: 'Hoy',
+      tomorrow: 'Mañana',
+      inDays: 'en {days} días'
+    }
+  },
+  imageUpload: {
+    urlLabel: 'URL de imagen',
+    urlPlaceholder: 'https://example.com/image.jpg',
+    urlRequired: 'Ingresa la URL de la imagen',
+    invalidUrl: 'URL de imagen inválida',
+    urlError: 'Error al cargar imagen desde URL',
+    addUrl: 'Agregar URL',
+    or: 'o',
+    fileLabel: 'Subir archivo',
+    fileHelp: 'Formatos soportados: JPG, PNG, GIF, WebP. Tamaño máximo: 5MB',
+    fileRequired: 'Selecciona archivo de imagen',
+    fileTooLarge: 'Archivo demasiado grande. Tamaño máximo: {maxSize}',
+    unsupportedFormat: 'Formato de archivo no soportado',
+    fileError: 'Error al procesar archivo',
+    loadError: 'Error al cargar imagen',
+    processing: 'Procesando imagen...',
+    error: 'Error'
+  },
+  result: {
+    title: 'Resultado del test',
+    totalScore: 'Puntuación total',
+    percentage: 'Porcentaje',
+    timeSpent: 'Tiempo empleado',
+    passed: 'Aprobado',
+    failed: 'Reprobado',
+    status: 'Estado',
+    scoreBreakdown: 'Desglose de puntuación',
+    overallProgress: 'Progreso general',
+    byDifficulty: 'Por dificultad',
+    timeAnalysis: 'Análisis de tiempo',
+    completionTime: 'Tiempo de finalización',
+    averageTimePerQuestion: 'Tiempo promedio por pregunta',
+    completedAt: 'Completado el',
+    timeLimit: 'Límite de tiempo',
+    detailedAnswers: 'Respuestas detalladas',
+    question: 'Pregunta',
+    correct: 'Correcta',
+    incorrect: 'Incorrecta',
+    selectedAnswers: 'Respuestas seleccionadas',
+    retakeTest: 'Repetir test',
+    shareResult: 'Compartir resultado',
+    downloadCertificate: 'Descargar certificado'
+  },
+  leaderboard: {
+    title: 'Tabla de clasificación',
+    subtitle: 'Resultados de todos los participantes',
+    sortBy: 'Ordenar por',
+    search: 'Buscar',
+    totalParticipants: 'Total de participantes',
+    passedCount: 'Aprobados',
+    averageScore: 'Puntuación promedio',
+    averageTime: 'Tiempo promedio'
+  },
+  common: {
+    loading: 'Cargando...',
+    error: 'Error',
+    retry: 'Reintentar'
+  },
+  layout: {
+    author: {
+      withLove: 'Con amor',
+      contacts: 'Contactos'
+    }
+  }
+} 
