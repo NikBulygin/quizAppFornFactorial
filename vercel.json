@@ -9,9 +9,15 @@
     }
   },
   "env": {
-    "NODE_OPTIONS": "--max-old-space-size=4096"
+    "NODE_OPTIONS": "--max-old-space-size=4096",
+    "BUILD_STORYBOOK": "true",
+    "COPY_TO_DIST": "false"
   },
   "rewrites": [
+    {
+      "source": "/storybook/(.*)",
+      "destination": "/storybook/$1"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

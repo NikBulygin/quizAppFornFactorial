@@ -10,6 +10,10 @@ services:
         value: 20
       - key: NODE_OPTIONS
         value: --max-old-space-size=4096
+      - key: BUILD_STORYBOOK
+        value: true
+      - key: COPY_TO_DIST
+        value: false
     healthCheckPath: /
     autoDeploy: true
     branch: main 

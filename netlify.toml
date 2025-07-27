@@ -8,6 +8,11 @@
   COPY_TO_DIST = "true"
 
 [[redirects]]
+  from = "/storybook/*"
+  to = "/storybook/:splat"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200 

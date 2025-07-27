@@ -5,6 +5,8 @@ build:
 env:
   NODE_VERSION: "20"
   NODE_OPTIONS: "--max-old-space-size=4096"
+  BUILD_STORYBOOK: "true"
+  COPY_TO_DIST: "false"
 
 formation:
   web:
