@@ -103,6 +103,16 @@
           >
             {{ t('navigation.findTests') }}
           </UButton>
+
+          <UButton
+            to="/ai-generator"
+            variant="ghost"
+            size="lg"
+            class="text-purple-600 dark:text-purple-400 hover:text-purple-900 dark:hover:text-purple-300"
+            icon="i-heroicons-sparkles"
+          >
+            {{ t('aiTestGenerator.title') }}
+          </UButton>
         </div>
       </div>
     </div>
@@ -112,7 +122,6 @@
 <script setup lang="ts">
 const { t } = useI18n()
 
-// Устанавливаем мета-теги для SEO
 useHead({
   title: t('home.seo.title'),
   meta: [

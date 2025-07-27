@@ -35,7 +35,6 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
   }
 
   try {
-    // Initialize Firebase Admin if not already initialized
     if (getApps().length === 0) {
       initializeApp({
         credential: cert(config.firebase.serviceAccount as ServiceAccount)
@@ -45,7 +44,6 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
     const db = getFirestore()
     const testRef = db.collection('tests').doc(id as string)
 
-    // Check if test exists
     const testDoc = await testRef.get()
     if (!testDoc.exists) {
       throw createError({
@@ -54,7 +52,6 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
       })
     }
 
-    // Update test document
     const updateData = {
       ...body,
       updatedAt: new Date().toISOString()
@@ -62,7 +59,6 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
 
     await testRef.update(updateData)
 
-    // Update questions if provided
     if (body.questions && body.questions.length > 0) {
       const questionsCollection = db.collection('questions')
       for (const question of body.questions) {
@@ -74,7 +70,6 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
       }
     }
 
-    // Update sections if provided
     if (body.sections && body.sections.length > 0) {
       const sectionsCollection = db.collection('sections')
       for (const section of body.sections) {
@@ -95,7 +90,7 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
     }
 
   } catch (error) {
-    console.error('Error updating test:', error)
+    
     
     return {
       success: false,

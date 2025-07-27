@@ -88,13 +88,11 @@
 <script setup lang="ts">
 const { t } = useI18n()
 
-// Состояние
 const importJson = ref('')
 const importMethod = ref<'text' | 'file'>('text')
 const fileInput = ref<HTMLInputElement | null>(null)
 const selectedFileName = ref<string | null>(null)
 
-// Вычисляемые свойства
 const canImport = computed(() => {
   if (importMethod.value === 'text') {
     return importJson.value.trim() !== ''
@@ -104,7 +102,6 @@ const canImport = computed(() => {
   return false
 })
 
-// Методы
 const handleFileUpload = (event: Event) => {
   const target = event.target as HTMLInputElement
   if (target.files && target.files.length > 0) {
@@ -139,8 +136,6 @@ const performImport = () => {
       reader.readAsText(file)
     }
   } catch (error) {
-    console.error('Error importing test:', error)
-    // Здесь можно показать уведомление об ошибке
   }
 }
 
@@ -151,7 +146,6 @@ const cancelImport = () => {
   emit('cancel')
 }
 
-// Emits
 const emit = defineEmits<{
   import: [jsonString: string]
   cancel: []

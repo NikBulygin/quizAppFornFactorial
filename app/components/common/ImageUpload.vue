@@ -137,7 +137,6 @@ const isLoading = ref(false)
 const uploadProgress = ref(0)
 const fileInput = ref<HTMLInputElement>()
 
-// Обработка загрузки по URL
 const handleUrlUpload = async () => {
   if (!imageUrl.value.trim()) {
     urlError.value = t('imageUpload.urlRequired')
@@ -165,7 +164,6 @@ const handleUrlUpload = async () => {
     emit('update:modelValue', result.data)
     emit('upload', result)
     
-    // Очищаем поле URL
     imageUrl.value = ''
     
   } catch {
@@ -177,7 +175,6 @@ const handleUrlUpload = async () => {
   }
 }
 
-// Обработка загрузки файла
 const handleFileUpload = async (event: Event) => {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
@@ -187,7 +184,6 @@ const handleFileUpload = async (event: Event) => {
     return
   }
 
-  // Проверяем размер файла
   if (file.size > props.maxFileSize) {
     fileError.value = t('imageUpload.fileTooLarge', { 
       maxSize: formatFileSize(props.maxFileSize) 
@@ -195,7 +191,6 @@ const handleFileUpload = async (event: Event) => {
     return
   }
 
-  // Проверяем формат файла
   if (!isSupportedImageFormat(file)) {
     fileError.value = t('imageUpload.unsupportedFormat')
     return
@@ -214,7 +209,6 @@ const handleFileUpload = async (event: Event) => {
     emit('update:modelValue', result.data)
     emit('upload', result)
     
-    // Очищаем input для возможности повторной загрузки
     if (fileInput.value) {
       fileInput.value.value = ''
     }
@@ -228,13 +222,11 @@ const handleFileUpload = async (event: Event) => {
   }
 }
 
-// Обработка ошибки загрузки изображения
 const handleImageError = () => {
   error.value = t('imageUpload.loadError')
   emit('error', error.value)
 }
 
-// Утилита для форматирования размера файла
 const formatFileSize = (bytes: number): string => {
   if (bytes === 0) return '0 Bytes'
   

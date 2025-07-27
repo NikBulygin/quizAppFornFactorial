@@ -43,49 +43,41 @@ export default defineEventHandler(async (event): Promise<TestSearchResponse> => 
     }
 
     const db = getFirestore()
-    let testsQuery = db.collection('tests')
+    const testsQuery = db.collection('tests')
 
-    // Применяем фильтры
     const search = query.search as string
-    const tags = query.tags ? (query.tags as string).split(',') : []
+    const tags = query.tags ? (query.tags as string).split(',').map(tag => tag.trim()).filter(Boolean) : []
     const difficulty = query.difficulty as string
-    const authorId = query.authorId as string
     const limit = parseInt(query.limit as string) || 20
     const offset = parseInt(query.offset as string) || 0
 
-    // Фильтр по автору
-    if (authorId) {
-      testsQuery = testsQuery.where('authorId', '==', authorId)
-    }
-
-    // Получаем тесты
     const testsSnapshot = await testsQuery.get()
     let tests: Test[] = []
 
     for (const doc of testsSnapshot.docs) {
       const testData = doc.data() as Test
       
-      // Фильтр по поиску в названии и описании
       if (search) {
         const searchLower = search.toLowerCase()
         const titleMatch = testData.title.toLowerCase().includes(searchLower)
-        const descriptionMatch = testData.description.toLowerCase().includes(searchLower)
-        const tagsMatch = testData.tags?.some(tag => tag.toLowerCase().includes(searchLower))
+        const descriptionMatch = testData.description?.toLowerCase().includes(searchLower) || false
+        const tagsMatch = testData.tags?.some(tag => tag.toLowerCase().includes(searchLower)) || false
         
         if (!titleMatch && !descriptionMatch && !tagsMatch) {
           continue
         }
       }
 
-      // Фильтр по тегам
       if (tags.length > 0) {
-        const hasMatchingTag = tags.some(tag => testData.tags?.includes(tag))
+        const testTags = testData.tags || []
+        const hasMatchingTag = tags.some(searchTag => 
+          testTags.some(testTag => testTag.toLowerCase() === searchTag.toLowerCase())
+        )
         if (!hasMatchingTag) {
           continue
         }
       }
 
-      // Получаем вопросы и секции для каждого теста
       const questionsSnapshot = await db.collection('questions')
         .where('testId', '==', testData.id)
         .get()
@@ -108,7 +100,6 @@ export default defineEventHandler(async (event): Promise<TestSearchResponse> => 
         sections.push(sectionData as TestSection)
       })
 
-      // Фильтр по сложности (если указан)
       if (difficulty) {
         const hasDifficultyQuestion = questions.some(q => q.difficulty === difficulty)
         if (!hasDifficultyQuestion) {
@@ -123,7 +114,6 @@ export default defineEventHandler(async (event): Promise<TestSearchResponse> => 
       })
     }
 
-    // Применяем пагинацию
     const total = tests.length
     tests = tests.slice(offset, offset + limit)
 
@@ -135,8 +125,6 @@ export default defineEventHandler(async (event): Promise<TestSearchResponse> => 
     }
 
   } catch (error) {
-    console.error('Error searching tests:', error)
-    
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to search tests'

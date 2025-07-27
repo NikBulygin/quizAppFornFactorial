@@ -17,7 +17,6 @@ export async function checkExpiredTests() {
     
     console.log('🕐 Checking for expired tests...', now.toISOString())
 
-    // Получаем все тесты в процессе
     const inProgressTests = await db.collection('passedTests')
       .where('status', '==', 'in_progress')
       .get()
@@ -28,7 +27,6 @@ export async function checkExpiredTests() {
       const passedTest = doc.data() as PassedTest
       const startTime = new Date(passedTest.startTime)
       
-      // Получаем информацию о тесте для проверки timeLimit
       const testDoc = await db.collection('tests').doc(passedTest.testId).get()
       if (!testDoc.exists) continue
 
@@ -36,11 +34,9 @@ export async function checkExpiredTests() {
       const timeLimitMs = (test.timeLimit || 60) * 60 * 1000 // конвертируем минуты в миллисекунды
       const elapsedTime = now.getTime() - startTime.getTime()
 
-      // Проверяем, истекло ли время
       if (elapsedTime > timeLimitMs) {
         console.log(`⏰ Test ${passedTest.id} expired. Elapsed: ${Math.round(elapsedTime / 1000 / 60)}min, Limit: ${test.timeLimit}min`)
         
-        // Получаем вопросы для вычисления результатов
         const questionsSnapshot = await db.collection('questions')
           .where('testId', '==', passedTest.testId)
           .get()
@@ -52,7 +48,6 @@ export async function checkExpiredTests() {
           questions.push(questionData as TestQuestion)
         })
 
-        // Вычисляем результаты на основе текущих ответов
         let totalScore = 0
         let maxScore = 0
 
@@ -73,7 +68,6 @@ export async function checkExpiredTests() {
         const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0
         const isPassed = percentage >= 60
 
-        // Обновляем статус теста
         await doc.ref.update({
           status: 'completed',
           endTime: now.toISOString(),
@@ -98,14 +92,11 @@ export async function checkExpiredTests() {
   }
 }
 
-// Функция для запуска проверки по расписанию
 export function startTestTimeoutChecker() {
-  // Проверяем каждый час
   const CHECK_INTERVAL = 60 * 60 * 1000 // 1 час в миллисекундах
   
   console.log('🚀 Starting test timeout checker...')
   
-  // Первая проверка через 1 минуту после запуска
   setTimeout(async () => {
     try {
       await checkExpiredTests()
@@ -114,7 +105,6 @@ export function startTestTimeoutChecker() {
     }
   }, 60 * 1000)
 
-  // Затем проверяем каждый час
   setInterval(async () => {
     try {
       await checkExpiredTests()

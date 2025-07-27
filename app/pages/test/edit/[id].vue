@@ -110,7 +110,6 @@ const handleSave = async (savedTest: Test) => {
     
     await router.push('/test/list')
   } catch (err) {
-    console.error('Error saving test:', err)
   }
 }
 

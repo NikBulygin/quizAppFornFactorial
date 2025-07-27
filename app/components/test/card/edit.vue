@@ -211,11 +211,9 @@ const statusOptions = [
 ]
 
 const handleImageUpload = (result: ImageUploadResult) => {
-  console.log('Image uploaded:', result)
 }
 
 const handleImageError = (error: string) => {
-  console.error('Image upload error:', error)
 }
 
 const _validateForm = () => {

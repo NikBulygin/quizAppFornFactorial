@@ -35,7 +35,6 @@
 <script setup>
 const redirectToStorybook = () => {
   if (import.meta.client) {
-    // Используем наш API роут
     window.location.href = '/api/storybook/index.html'
   }
 }

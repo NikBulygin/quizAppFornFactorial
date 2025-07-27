@@ -245,7 +245,6 @@ const removeAnswer = (index: number) => {
     const removedAnswer = formData.value.answers[index]
     formData.value.answers.splice(index, 1)
     
-    // Удаляем ID ответа из правильных ответов, если он там был
     if (formData.value.correctAnswerIds) {
       const answerIndex = formData.value.correctAnswerIds.indexOf(removedAnswer.id)
       if (answerIndex > -1) {
@@ -255,19 +254,16 @@ const removeAnswer = (index: number) => {
   }
 }
 
-// Обработчик изменения правильности ответа
 const handleCorrectnessChange = (answerId: string, isCorrect: boolean) => {
   if (!formData.value.correctAnswerIds) {
     formData.value.correctAnswerIds = []
   }
   
   if (isCorrect) {
-    // Добавляем ID в правильные ответы, если его там нет
     if (!formData.value.correctAnswerIds.includes(answerId)) {
       formData.value.correctAnswerIds.push(answerId)
     }
   } else {
-    // Удаляем ID из правильных ответов
     const index = formData.value.correctAnswerIds.indexOf(answerId)
     if (index > -1) {
       formData.value.correctAnswerIds.splice(index, 1)
@@ -276,10 +272,8 @@ const handleCorrectnessChange = (answerId: string, isCorrect: boolean) => {
 }
 
 const handleImageUpload = (result: ImageUploadResult) => {
-  console.log('Image uploaded:', result)
 }
 
 const handleImageError = (error: string) => {
-  console.error('Image upload error:', error)
 }
 </script> 

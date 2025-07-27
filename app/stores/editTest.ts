@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, readonly } from 'vue'
+import { ref } from 'vue'
 
 export const useEditTestStore = defineStore('editTest', () => {
   const currentTest = ref<Test | null>(null)
@@ -13,8 +13,7 @@ export const useEditTestStore = defineStore('editTest', () => {
       if (savedTest) {
         try {
           currentTest.value = JSON.parse(savedTest)
-        } catch (error) {
-          console.error('Error parsing saved test:', error)
+        } catch {
           localStorage.removeItem('nfactorial-quiz-current-test')
         }
       }
@@ -27,11 +26,19 @@ export const useEditTestStore = defineStore('editTest', () => {
     }
   }
 
-  const setCurrentTest = (test: Test | null) => {
-    currentTest.value = test
+  const setCurrentTest = (test: any) => {
     if (test) {
-      saveToStorage(test)
+      const processedTest = {
+        ...test,
+        questions: test.questions.map((q: any) => ({
+          ...q,
+          correctAnswerIds: q.correctAnswerIds || []
+        }))
+      } as Test
+      currentTest.value = processedTest
+      saveToStorage(processedTest)
     } else {
+      currentTest.value = null
       if (import.meta.client) {
         localStorage.removeItem('nfactorial-quiz-current-test')
       }
@@ -76,7 +83,7 @@ export const useEditTestStore = defineStore('editTest', () => {
       const newSections = test.sections.map((s: TestSection) => ({
         ...s,
         id: `section-${timestamp}-${Math.random()}`,
-        questionCount: s.questionCount || 5 // Default question count
+        questionCount: s.questionCount || 5
       }))
       
       const questionIdMap = new Map()
@@ -107,7 +114,7 @@ export const useEditTestStore = defineStore('editTest', () => {
         questions: newQuestions,
         sections: newSections,
         questionSectionLinks: newQuestionSectionLinks,
-        authorId: test.authorId || test.author?.id || 'current-user', // Handle both old and new structure
+        authorId: test.authorId || test.author?.id || 'current-user',
         tags: test.tags || [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -120,7 +127,6 @@ export const useEditTestStore = defineStore('editTest', () => {
     }
   }
 
-  // API methods
   const createTest = async (test: Test, useTestMode = false): Promise<Test> => {
     isLoading.value = true
     error.value = null
@@ -231,13 +237,11 @@ export const useEditTestStore = defineStore('editTest', () => {
   }
 
   return {
-    // State
-    currentTest: readonly(currentTest),
-    isEditing: readonly(isEditing),
-    isLoading: readonly(isLoading),
-    error: readonly(error),
+    currentTest,
+    isEditing,
+    isLoading,
+    error,
     
-    // Actions
     setCurrentTest,
     updateTest: updateTestLocal,
     clearTest,
@@ -245,7 +249,6 @@ export const useEditTestStore = defineStore('editTest', () => {
     importTest,
     setEditing: (editing: boolean) => { isEditing.value = editing },
     
-    // API methods
     createTest,
     updateTestApi,
     fetchTest,

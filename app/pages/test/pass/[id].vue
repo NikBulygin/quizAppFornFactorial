@@ -207,11 +207,9 @@ const { t } = useI18n()
 
 const testPassStore = useTestPassStore()
 
-// Состояние
 const loading = ref(true)
 const error = ref<string | null>(null)
 
-// Загрузка теста
 const loadTest = async () => {
   loading.value = true
   error.value = null
@@ -224,7 +222,6 @@ const loadTest = async () => {
       throw new Error(response.error || t('test.pass.testNotFound'))
     }
 
-    // Запускаем тест (store автоматически проверит восстановление)
     await testPassStore.startTest(response.data)
     
   } catch (err) {
@@ -234,7 +231,6 @@ const loadTest = async () => {
   }
 }
 
-// Навигация по вопросам
 const nextQuestion = () => {
   if (testPassStore.currentQuestionIndex < testPassStore.totalQuestions - 1) {
     testPassStore.updateCurrentPosition(
@@ -253,7 +249,6 @@ const previousQuestion = () => {
   }
 }
 
-// Работа с ответами
 const isAnswerSelected = (answerId: string): boolean => {
   if (!testPassStore.currentQuestion || !testPassStore.currentTestPass) return false
   
@@ -270,31 +265,26 @@ const toggleAnswer = (answerId: string) => {
   let newAnswers: string[]
   
   if ((testPassStore.currentQuestion?.correctAnswersCount || 1) > 1) {
-    // Множественный выбор
     if (currentAnswers.includes(answerId)) {
       newAnswers = currentAnswers.filter(id => id !== answerId)
     } else {
       newAnswers = [...currentAnswers, answerId]
     }
   } else {
-    // Единичный выбор
     newAnswers = [answerId]
   }
   
   testPassStore.saveAnswer(questionId, newAnswers)
 }
 
-// Завершение теста
 const finishTest = async () => {
   try {
     await testPassStore.completeTest()
     router.push(`/test/result/${testPassStore.currentTestPass!.testId}`)
   } catch (err) {
-    console.error('Error finishing test:', err)
   }
 }
 
-// Подтверждение выхода
 const confirmExit = () => {
   if (confirm(t('test.pass.exitConfirmation'))) {
     testPassStore.clearTest()
@@ -302,7 +292,6 @@ const confirmExit = () => {
   }
 }
 
-// Форматирование времени
 const formatTime = (seconds: number): string => {
   const hours = Math.floor(seconds / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
@@ -314,13 +303,10 @@ const formatTime = (seconds: number): string => {
   return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 }
 
-// Инициализация
 onMounted(() => {
   loadTest()
 })
 
-// Очистка при уходе со страницы
 onBeforeUnmount(() => {
-  // Не очищаем тест при уходе, чтобы сохранить прогресс
 })
 </script> 

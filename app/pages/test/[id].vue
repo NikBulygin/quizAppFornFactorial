@@ -160,12 +160,10 @@ const route = useRoute()
 const router = useRouter()
 const testPassStore = useTestPassStore()
 
-// Состояние
 const isLoading = ref(true)
 const error = ref<string | null>(null)
 const test = ref<Test | null>(null)
 
-// Вычисляемые свойства
 const totalPoints = computed(() => {
   if (!test.value) return 0
   return test.value.questions.reduce((sum, q) => sum + q.points, 0)
@@ -244,24 +242,18 @@ const canGoNext = computed(() => {
          testPassStore.currentTestPass.currentSectionIndex < test.value.sections.length - 1
 })
 
-// Методы
 const loadTest = async () => {
   isLoading.value = true
   error.value = null
   
   try {
-    // Проверяем, есть ли уже загруженный тест в store
     if (testPassStore.test && testPassStore.test.id === route.params.id) {
-      // Используем оригинальный тест для правильной работы статусов
       test.value = JSON.parse(JSON.stringify(testPassStore.originalTest || testPassStore.test))
       isLoading.value = false
       return
     }
     
-    // В реальном приложении здесь будет API запрос
-    // const testData = await api.getTest(route.params.id as string)
     
-    // Пока используем моковые данные
     const testData: Test = {
       id: route.params.id as string,
       title: 'Пример теста',
@@ -321,7 +313,6 @@ const loadTest = async () => {
     
     test.value = testData
     
-    // Если есть активный тест, проверяем что это тот же тест
     if (testPassStore.hasActiveTest && testPassStore.currentTestPass?.testId !== testData.id) {
       testPassStore.clearTest()
     }
@@ -365,10 +356,8 @@ const handlePrevious = () => {
   const { currentSectionIndex, currentQuestionIndex } = testPassStore.currentTestPass
   
   if (currentQuestionIndex > 0) {
-    // Предыдущий вопрос в той же секции
     testPassStore.updateCurrentPosition(currentSectionIndex, currentQuestionIndex - 1)
   } else if (currentSectionIndex > 0) {
-    // Последний вопрос предыдущей секции
     const prevSection = test.value.sections[currentSectionIndex - 1]
     if (prevSection) {
       const questionsInPrevSection = test.value.questions.filter(q => 
@@ -396,27 +385,21 @@ const handleNext = () => {
   )
   
   if (currentQuestionIndex < questionsInSection.length - 1) {
-    // Следующий вопрос в той же секции
     testPassStore.updateCurrentPosition(currentSectionIndex, currentQuestionIndex + 1)
   } else if (currentSectionIndex < test.value.sections.length - 1) {
-    // Первый вопрос следующей секции
     testPassStore.updateCurrentPosition(currentSectionIndex + 1, 0)
   }
 }
 
 const handleFinish = () => {
   testPassStore.completeTest()
-  // В реальном приложении здесь будет переход на страницу результатов
-  console.log('Тест завершен!', testPassStore.currentTestPass)
 }
 
 const handleExit = () => {
   if (testPassStore.currentTestPass?.isCompleted) {
-    // Тест уже завершен - просто выходим
     testPassStore.clearTest()
     router.push('/')
   } else {
-    // Показываем подтверждение выхода
     if (confirm(t('test.pass.exitConfirmation'))) {
       testPassStore.clearTest()
       router.push('/')
@@ -424,13 +407,10 @@ const handleExit = () => {
   }
 }
 
-// Инициализация
 onMounted(() => {
   loadTest()
 })
 
-// Очистка при размонтировании
 onUnmounted(() => {
-  // Не очищаем тест при размонтировании, чтобы сохранить прогресс
 })
 </script> 

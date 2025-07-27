@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
@@ -9,7 +8,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-16',
 
   runtimeConfig: {
-    // Auth0 configuration
+    googleGenaiApiKey: process.env.GOOGLE_GENAI_API_KEY,
     oauth: {
       auth0: {
         clientSecret: process.env.NUXT_OAUTH_AUTH0_CLIENT_SECRET,
@@ -17,17 +16,14 @@ export default defineNuxtConfig({
         clientId: process.env.NUXT_OAUTH_AUTH0_CLIENT_ID,
       }
     },
-    // Auth0 Machine-to-Machine configuration for Management API
     auth0: {
       m2mClientId: process.env.NUXT_AUTH0_M2M_CLIENT_ID || 'XA1vRtIYJWmOmqb3Syh15ZN8KupPuZIN',
       m2mClientSecret: process.env.NUXT_AUTH0_M2M_CLIENT_SECRET || 'w8nA8EV-NgXXHQGDGfINkoqkcIHyuYA8roHoS0EQiALOLEHYMTqA27fbDfK_huQ9',
     },
-    // Firebase configuration for Admin SDK
     firebase: {
       projectId: 'quizapp-7d44c',
       clientEmail: 'firebase-adminsdk-fbsvc@quizapp-7d44c.iam.gserviceaccount.com',
       privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      // Service account credentials
       serviceAccount: {
         type: 'service_account',
         project_id: 'quizapp-7d44c',

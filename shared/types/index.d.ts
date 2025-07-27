@@ -117,8 +117,9 @@ declare global {
       questionId: string
       sectionId: string
     }>
-    authorId?: string // Только ID автора
-    tags?: string[] // Массив тегов
+    authorId?: string
+    author?: User
+    tags?: string[]
     createdAt?: string
     updatedAt?: string
   }
@@ -132,7 +133,7 @@ declare global {
     id: string
     testId: string
     userId: string
-    status: 'in_progress' | 'completed' | 'cancelled'
+    status: 'in_progress' | 'completed' | 'cancelled' | 'created'
     startTime: string
     endTime?: string
     timeSpent: number // в секундах

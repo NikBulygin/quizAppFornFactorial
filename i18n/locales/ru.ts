@@ -369,5 +369,42 @@ export default {
       registeredAt: 'Зарегистрирован',
       noName: 'Без имени'
     }
+  },
+  myTests: {
+    title: 'Мои тесты',
+    description: 'Управляйте своими тестами и просматривайте результаты',
+    searchPlaceholder: 'Поиск по названию...',
+    filterByStatus: 'Фильтр по статусу',
+    clearFilters: 'Очистить фильтры',
+    allStatuses: 'Все статусы',
+    status: {
+      inProgress: 'В процессе',
+      completed: 'Завершен',
+      cancelled: 'Отменен',
+      created: 'Создан'
+    },
+    noTests: 'Тесты не найдены',
+    noTestsDescription: 'У вас пока нет пройденных тестов. Найдите интересные тесты и начните проходить их!',
+    findTests: 'Найти тесты'
+  },
+  testSearch: {
+    title: 'Поиск тестов',
+    description: 'Найдите интересные тесты для прохождения',
+    searchPlaceholder: 'Поиск по названию, описанию или тегам...',
+    filterByTags: 'Фильтр по тегам',
+    filterByDifficulty: 'Фильтр по сложности',
+    allDifficulties: 'Все сложности',
+    search: 'Найти',
+    resultsCount: 'Найдено {found} из {count} тестов',
+    sortBy: 'Сортировать по',
+    sort: {
+      relevance: 'По релевантности',
+      newest: 'Сначала новые',
+      oldest: 'Сначала старые',
+      title: 'По названию'
+    },
+    noResults: 'Тесты не найдены',
+    noResultsDescription: 'Попробуйте изменить параметры поиска или фильтры',
+    clearFilters: 'Очистить фильтры'
   }
 } 

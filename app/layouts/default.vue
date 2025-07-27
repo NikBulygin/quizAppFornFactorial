@@ -65,6 +65,5 @@
 </template>
 
 <script setup lang="ts">
-// Layout с Header и Footer
 </script>
 

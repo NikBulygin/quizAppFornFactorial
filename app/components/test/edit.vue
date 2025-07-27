@@ -22,6 +22,17 @@
             @import="handleImportTest"
             @cancel="handleImportCancel"
           />
+
+          <!-- Кнопка AI генератора -->
+          <UButton
+            variant="outline"
+            size="sm"
+            @click="openAiGenerator"
+            color="primary"
+          >
+            <UIcon name="i-heroicons-sparkles" class="w-4 h-4 mr-2" />
+            {{ t('aiTestGenerator.title') }}
+          </UButton>
           
           <UButton
             variant="outline"
@@ -472,20 +483,17 @@ const emit = defineEmits<{
   cancel: []
 }>()
 
-// Состояние
 const isSaving = ref(false)
 const selectedQuestions = ref<string[]>([])
 const selectedSection = ref<string>('')
 const editingQuestion = ref<TestQuestion | null>(null)
 const editingSection = ref<TestSection | null>(null)
 
-// Фильтры вопросов
 const questionFilters = ref({
   difficulty: null as string | null,
   search: ''
 })
 
-// Форма теста
 const formData = ref({
   title: '',
   description: '',
@@ -506,7 +514,6 @@ const formData = ref({
   tags: [] as string[]
 })
 
-// Исправляю инициализация formData через defaultFormData
 const defaultFormData = {
   title: '',
   description: '',
@@ -523,7 +530,6 @@ const defaultFormData = {
   tags: [] as string[]
 }
 
-// Вычисляемые свойства
 const hasTestData = computed(() => {
   return formData.value.title.trim() || 
          formData.value.questions.length > 0 || 
@@ -562,9 +568,7 @@ const difficultyOptions = computed(() => [
   { label: t('question.difficulties.hard'), value: 'hard' }
 ])
 
-// Инициализация
 onMounted(() => {
-  // Загружаем данные из store если есть
   if (editTestStore.currentTest) {
     const storedTest = editTestStore.currentTest
     formData.value = { 
@@ -607,7 +611,6 @@ onMounted(() => {
           questionId: link.questionId,
           sectionId: link.sectionId
         })) : 
-        // Обратная совместимость: создаем связи из старой структуры
         (storedTest.sections as any).flatMap((section: any) => 
           (section.questions || []).map((questionId: string) => ({
             questionId,
@@ -632,7 +635,6 @@ onMounted(() => {
   }
 })
 
-// Автосохранение при изменении данных
 watch(formData, (newData) => {
   if (hasTestData.value) {
     const test: Test = {
@@ -657,7 +659,6 @@ watch(formData, (newData) => {
   }
 }, { deep: true })
 
-// Методы
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
     case 'easy': return 'success'
@@ -683,7 +684,6 @@ const getQuestionsInSection = (sectionId: string) => {
   return formData.value.questions.filter(q => getQuestionSectionLink(q.id)?.sectionId === sectionId)
 }
 
-// Исправленный чекбокс для выбора вопросов
 function toggleQuestionSelection(id: string, checked: boolean) {
   if (checked) {
     if (!selectedQuestions.value.includes(id)) selectedQuestions.value.push(id)
@@ -693,7 +693,6 @@ function toggleQuestionSelection(id: string, checked: boolean) {
 }
 
 const updateSelectedQuestions = () => {
-  // Обновление выбранных вопросов
 }
 
 const editQuestion = (question: TestQuestion) => {
@@ -701,12 +700,10 @@ const editQuestion = (question: TestQuestion) => {
 }
 
 const deleteQuestion = (questionId: string) => {
-  // Удаляем все связи вопроса с секциями
   formData.value.questionSectionLinks = formData.value.questionSectionLinks.filter(
     link => link.questionId !== questionId
   )
   
-  // Удаляем вопрос из банка
   formData.value.questions = formData.value.questions.filter(q => q.id !== questionId)
 }
 
@@ -715,12 +712,10 @@ const editSection = (section: TestSection) => {
 }
 
 const deleteSection = (sectionId: string) => {
-  // Удаляем все связи с этой секцией
   formData.value.questionSectionLinks = formData.value.questionSectionLinks.filter(
     link => link.sectionId !== sectionId
   )
   
-  // Удаляем секцию
   formData.value.sections = formData.value.sections.filter(s => s.id !== sectionId)
 }
 
@@ -730,21 +725,17 @@ const assignQuestionsToSection = () => {
   const section = formData.value.sections.find(s => s.id === selectedSection.value)
   if (!section) return
   
-  // Добавляем связи вопросов с секцией (без дублирования)
   selectedQuestions.value.forEach(questionId => {
-    // Удаляем существующую связь с этой секцией
     formData.value.questionSectionLinks = formData.value.questionSectionLinks.filter(
       link => !(link.questionId === questionId && link.sectionId === selectedSection.value)
     )
     
-    // Добавляем новую связь
     formData.value.questionSectionLinks.push({
       questionId,
       sectionId: selectedSection.value
     })
   })
   
-  // Очищаем выбор
   selectedQuestions.value = []
   selectedSection.value = ''
 }
@@ -759,12 +750,10 @@ const saveTest = async () => {
   isSaving.value = true
   
   try {
-    // Валидация
     if (!formData.value.title.trim()) {
       throw new Error(t('test.edit.errors.titleRequired'))
     }
     
-    // Создание объекта теста
     const test: Test = {
       id: props.test?.id || `test-${Date.now()}`,
       title: formData.value.title,
@@ -786,24 +775,20 @@ const saveTest = async () => {
     
     emit('save', test)
   } catch (error) {
-    console.error('Error saving test:', error)
   } finally {
     isSaving.value = false
   }
 }
 
 const handleCancel = () => {
-  // Очищаем store при отмене
   editTestStore.clearTest()
   emit('cancel')
 }
 
-// Методы для экспорта/импорта
 const exportTest = () => {
   try {
     const json = editTestStore.exportTest()
     
-    // Создаем blob и скачиваем файл
     const blob = new Blob([json], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -814,11 +799,9 @@ const exportTest = () => {
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
   } catch (error) {
-    console.error('Error exporting test:', error)
   }
 }
 
-// Методы для распределения сложности
 const resetDifficultyDistribution = () => {
   formData.value.difficultyDistribution = {
     easy: 40,
@@ -827,7 +810,6 @@ const resetDifficultyDistribution = () => {
   }
 }
 
-// Функция для перетаскивания точек с учетом ограничений
 let dragging: null | 'easy' | 'medium' = null;
 let sliderRect: DOMRect | null = null;
 
@@ -846,8 +828,6 @@ const handleDragMove = (e: MouseEvent) => {
   const { easy, medium } = formData.value.difficultyDistribution;
 
   if (dragging === 'easy') {
-    // Левая точка: позиция = easy
-    // Тяжелая секция остается неизменной
     const hard = 100 - easy - medium;
     const maxEasy = 100 - hard;
     const newEasy = Math.max(0, Math.min(percent, maxEasy));
@@ -855,10 +835,8 @@ const handleDragMove = (e: MouseEvent) => {
     formData.value.difficultyDistribution.easy = newEasy;
     formData.value.difficultyDistribution.medium = newMedium;
   } else if (dragging === 'medium') {
-    // Средняя точка: позиция = easy + medium
     const newMedium = Math.max(0, Math.min(percent - easy, 100 - easy));
     formData.value.difficultyDistribution.medium = newMedium;
-    // hard вычисляется автоматически как остаток
   }
 };
 
@@ -869,7 +847,6 @@ const stopDragging = () => {
   document.removeEventListener('mouseup', stopDragging);
 };
 
-// Методы для обработки событий модальных окон
 const handleQuestionAdded = (question: TestQuestion) => {
   formData.value.questions.push(question)
 }
@@ -878,7 +855,6 @@ const handleSectionAdded = (section: TestSection) => {
   formData.value.sections.push(section)
 }
 
-// Методы для импорта теста
 const handleImportTest = (jsonString: string) => {
   try {
     const importedTest = editTestStore.importTest(jsonString)
@@ -889,17 +865,13 @@ const handleImportTest = (jsonString: string) => {
       timeLimit: importedTest.timeLimit ? String(importedTest.timeLimit) : ''
     }
   } catch (error) {
-    console.error('Error importing test:', error)
-    // Здесь можно показать уведомление об ошибке
   }
 }
 
 const handleImportCancel = () => {
-  // Действие при отмене импорта
 }
 
 const handleQuestionUpdated = (updatedQuestion: TestQuestion) => {
-  // Обновляем вопрос в списке
   const index = formData.value.questions.findIndex(q => q.id === updatedQuestion.id)
   if (index !== -1) {
     formData.value.questions[index] = updatedQuestion
@@ -908,7 +880,6 @@ const handleQuestionUpdated = (updatedQuestion: TestQuestion) => {
 }
 
 const handleSectionUpdated = (updatedSection: TestSection) => {
-  // Обновляем секцию в списке
   const index = formData.value.sections.findIndex(s => s.id === updatedSection.id)
   if (index !== -1) {
     formData.value.sections[index] = updatedSection
@@ -926,6 +897,10 @@ const updateTags = () => {
 const removeTag = (tag: string) => {
   formData.value.tags = formData.value.tags.filter(t => t !== tag)
   formData.value.tagsInput = formData.value.tags.join(', ')
+}
+
+const openAiGenerator = () => {
+  navigateTo('/ai-generator')
 }
 </script>
 

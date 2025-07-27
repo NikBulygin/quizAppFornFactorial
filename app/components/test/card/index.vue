@@ -209,7 +209,6 @@ defineEmits<{
   viewResult: []
 }>()
 
-// Вычисляемые свойства
 const totalQuestions = computed(() => {
   return props.test.questions.length
 })
@@ -222,7 +221,6 @@ const estimatedTime = computed(() => {
   return props.test.timeLimit || Math.ceil(totalQuestions.value * 2) // 2 минуты на вопрос по умолчанию
 })
 
-// Методы
 const getResultColorClass = () => {
   if (!props.userResult) return ''
   

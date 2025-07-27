@@ -76,7 +76,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const currentTime = ref(0)
 
-// Обновляем текущее время каждую секунду
 onMounted(() => {
   updateCurrentTime()
   const interval = setInterval(updateCurrentTime, 1000)
@@ -92,13 +91,11 @@ const updateCurrentTime = () => {
 
 const displayTime = computed(() => {
   if (props.timer.mode === 'countdown') {
-    // Если есть дедлайн - считаем время до него
     if (props.timer.deadline) {
       const deadlineTime = Math.floor(new Date(props.timer.deadline).getTime() / 1000)
       const remaining = deadlineTime - currentTime.value
       return Math.max(0, remaining)
     }
-    // Если есть timeLimit - считаем оставшееся время выполнения
     if (props.timer.timeLimit) {
       const elapsed = currentTime.value - props.startTime
       const remaining = props.timer.timeLimit - elapsed
@@ -106,7 +103,6 @@ const displayTime = computed(() => {
     }
     return 0
   } else {
-    // Для time mode показываем текущее время в секундах с начала дня
     const now = new Date()
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate())
     return Math.floor((now.getTime() - startOfDay.getTime()) / 1000)

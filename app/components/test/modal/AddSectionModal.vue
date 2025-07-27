@@ -86,15 +86,12 @@ function addSection() {
     questions: []
   }
   
-  // Emit event to parent
   emit('section-added', section)
   
-  // Reset form
   newSection.value = { title: '', description: '', questionCount: 10 }
 }
 
 function cancelAddSection() {
-  // Reset form
   newSection.value = { title: '', description: '', questionCount: 10 }
 }
 

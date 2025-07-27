@@ -170,13 +170,10 @@ const emit = defineEmits<{
   finishTest: []
 }>()
 
-// Обработчик клика по кнопке завершения теста
 const handleFinishTest = () => {
   if (progressPercentage.value >= 100) {
-    // Все вопросы отвечены - завершаем сразу
     emit('finishTest')
   } else {
-    // Не все вопросы отвечены - завершаем сразу (убрали диалог)
     emit('finishTest')
   }
 }
@@ -185,7 +182,6 @@ const currentSectionQuestions = computed(() => {
   const currentSection = props.navigation.sections[props.navigation.currentSection]
   if (!currentSection) return []
   
-  // Используем questionIds если они есть, иначе создаем фиктивные ID
   const questionIds = currentSection.questionIds || 
     Array.from({ length: currentSection.questionCount }, (_, i) => `question-${i}`)
   
@@ -195,7 +191,6 @@ const currentSectionQuestions = computed(() => {
   }))
 })
 
-// Функция для определения статуса вопроса
 const getQuestionStatus = (questionId: string): 'outline' | 'primary' | 'success' | 'error' => {
   const status = props.navigation.questionStatuses[questionId]
   
@@ -215,7 +210,6 @@ const progressPercentage = computed(() => {
   return totalQuestions > 0 ? Math.round((answeredQuestions / totalQuestions) * 100) : 0
 })
 
-// Вычисляемые свойства для статистики
 const totalQuestions = computed(() => {
   return props.navigation.sections.reduce((sum, section) => sum + section.questionCount, 0)
 })
@@ -259,7 +253,6 @@ const getQuestionColor = (questionId: string) => {
 const getQuestionButtonSize = () => {
   const questionCount = currentSectionQuestions.value.length
   
-  // Для большого количества вопросов используем меньший размер
   if (questionCount > 80) return 'xs'
   if (questionCount > 50) return 'sm'
   if (questionCount > 20) return 'md'

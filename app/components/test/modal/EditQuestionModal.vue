@@ -29,17 +29,14 @@ interface Props {
 const props = defineProps<Props>()
 
 function cancelEditQuestion() {
-  // Модальное окно закроется автоматически
 }
 
 function updateQuestion(updatedQuestion: Partial<TestQuestion>) {
-  // Обновляем вопрос с новыми данными
   const question: TestQuestion = {
     ...props.question,
     ...updatedQuestion
   }
   
-  // Emit event to parent
   emit('question-updated', question)
 }
 

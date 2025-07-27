@@ -91,12 +91,10 @@ function updateSection() {
     questionCount: editedSection.value.questionCount
   }
   
-  // Emit event to parent
   emit('section-updated', section)
 }
 
 function cancelEditSection() {
-  // Reset form to original values
   editedSection.value = {
     title: props.section.title,
     description: props.section.description || '',

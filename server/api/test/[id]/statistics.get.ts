@@ -15,7 +15,6 @@ export default defineEventHandler(async (event): Promise<TestStatisticsApiRespon
 
     const db = getFirestore()
     
-    // Получаем все прохождения данного теста
     const passedTestsSnapshot = await db.collection('passedTests')
       .where('testId', '==', id)
       .where('status', '==', 'completed')
@@ -43,7 +42,6 @@ export default defineEventHandler(async (event): Promise<TestStatisticsApiRespon
       }
     }
 
-    // Вычисляем статистику
     const totalAttempts = passedTests.length
     const passedAttempts = passedTests.filter(test => test.isPassed).length
     const averageScore = Math.round(
@@ -74,7 +72,7 @@ export default defineEventHandler(async (event): Promise<TestStatisticsApiRespon
     }
 
   } catch (error) {
-    console.error('Error fetching test statistics:', error)
+    
     
     return {
       success: false,

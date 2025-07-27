@@ -175,13 +175,11 @@
 const route = useRoute()
 const { t } = useI18n()
 
-// Состояние
 const loading = ref(true)
 const error = ref<string | null>(null)
 const passedTest = ref<PassedTest | null>(null)
 const test = ref<Test | null>(null)
 
-// Загрузка результатов
 const loadResult = async () => {
   loading.value = true
   error.value = null
@@ -189,7 +187,6 @@ const loadResult = async () => {
   try {
     const testId = route.params.id as string
     
-    // Загружаем прохождение теста
     const response = await $fetch<PassedTestListApiResponse>('/api/passed-test/my')
     
     if (!response.success || !response.data) {
@@ -204,7 +201,6 @@ const loadResult = async () => {
     
     passedTest.value = foundTest
     
-    // Загружаем данные теста
     const testResponse = await $fetch<TestApiResponse>(`/api/test/${testId}`)
     
     if (!testResponse.success || !testResponse.data) {
@@ -220,7 +216,6 @@ const loadResult = async () => {
   }
 }
 
-// Проверка правильности ответа
 const isCorrectAnswer = (questionId: string, answerId: string): boolean => {
   if (!test.value) return false
   
@@ -228,7 +223,6 @@ const isCorrectAnswer = (questionId: string, answerId: string): boolean => {
   return question?.correctAnswerIds?.includes(answerId) || false
 }
 
-// Проверка неправильного ответа пользователя
 const isWrongAnswer = (questionId: string, answerId: string): boolean => {
   if (!passedTest.value || !test.value) return false
   
@@ -239,7 +233,6 @@ const isWrongAnswer = (questionId: string, answerId: string): boolean => {
   return isUserSelected && !isCorrect
 }
 
-// Проверка ответа пользователя
 const isUserAnswer = (questionId: string, answerId: string): boolean => {
   if (!passedTest.value) return false
   
@@ -247,7 +240,6 @@ const isUserAnswer = (questionId: string, answerId: string): boolean => {
   return userAnswer?.answerIds.includes(answerId) || false
 }
 
-// Форматирование времени
 const formatTime = (seconds: number): string => {
   const hours = Math.floor(seconds / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
@@ -259,7 +251,6 @@ const formatTime = (seconds: number): string => {
   return `${minutes}м ${secs}с`
 }
 
-// Инициализация
 onMounted(() => {
   loadResult()
 })

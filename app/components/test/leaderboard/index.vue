@@ -209,14 +209,12 @@ defineEmits<{
   retake: [result: TestResult]
 }>()
 
-// Состояние
 const sortBy = ref('score')
 const sortOrder = ref<'asc' | 'desc'>('desc')
 const searchTerm = ref('')
 const currentPage = ref(1)
 const pageSize = ref(10)
 
-// Опции сортировки
 const sortOptions = computed(() => [
   { label: t('leaderboard.sortByScore'), value: 'score' },
   { label: t('leaderboard.sortByTime'), value: 'time' },
@@ -225,7 +223,6 @@ const sortOptions = computed(() => [
   { label: t('leaderboard.sortByAttempts'), value: 'attempts' }
 ])
 
-// Колонки таблицы
 const columns = computed(() => [
   {
     key: 'rank',
@@ -264,7 +261,6 @@ const columns = computed(() => [
   }
 ])
 
-// Вычисляемые свойства
 const filteredResults = computed(() => {
   if (!searchTerm.value) return props.results
   
@@ -327,7 +323,6 @@ const filteredAndSortedResults = computed(() => {
   return sortedResults.value.slice(start, end)
 })
 
-// Статистика
 const totalParticipants = computed(() => props.results.length)
 
 const passedCount = computed(() => 
@@ -346,7 +341,6 @@ const averageTime = computed(() => {
   return Math.round(total / props.results.length)
 })
 
-// Методы
 const toggleSortOrder = () => {
   sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
 }
@@ -383,7 +377,6 @@ const formatDate = (dateString: string) => {
   })
 }
 
-// Следим за изменениями фильтров
 watch([searchTerm, sortBy, sortOrder], () => {
   currentPage.value = 1
 })

@@ -24,7 +24,6 @@ export default defineEventHandler(async (event): Promise<PassedTestApiResponse> 
     const db = getFirestore()
     const { testId } = body
 
-    // Проверяем, что тест существует
     const testDoc = await db.collection('tests').doc(testId).get()
     if (!testDoc.exists) {
       throw createError({
@@ -33,7 +32,6 @@ export default defineEventHandler(async (event): Promise<PassedTestApiResponse> 
       })
     }
 
-    // Проверяем, есть ли уже активное прохождение теста
     const existingPassedTest = await db.collection('passedTests')
       .where('testId', '==', testId)
       .where('userId', '==', session.user.id)
@@ -41,7 +39,6 @@ export default defineEventHandler(async (event): Promise<PassedTestApiResponse> 
       .get()
 
     if (!existingPassedTest.empty) {
-      // Возвращаем существующее прохождение
       const existingTest = existingPassedTest.docs[0].data() as PassedTest
       return {
         success: true,
@@ -50,7 +47,6 @@ export default defineEventHandler(async (event): Promise<PassedTestApiResponse> 
       }
     }
 
-    // Создаем новое прохождение теста
     const passedTestData: PassedTest = {
       id: `passed-test-${Date.now()}`,
       testId,
@@ -76,7 +72,7 @@ export default defineEventHandler(async (event): Promise<PassedTestApiResponse> 
     }
 
   } catch (error) {
-    console.error('Error starting test:', error)
+    
     
     return {
       success: false,

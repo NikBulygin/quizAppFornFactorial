@@ -254,7 +254,6 @@ defineEmits<{
   download: []
 }>()
 
-// Вычисляемые свойства
 const averageTimePerQuestion = computed(() => {
   return props.result.answers.length > 0 
     ? Math.round(props.result.timeSpent / props.result.answers.length)
@@ -281,7 +280,6 @@ const difficultyStats = computed(() => {
     }
   })
   
-  // Вычисляем проценты
   Object.keys(stats).forEach(difficulty => {
     const stat = stats[difficulty as keyof typeof stats]
     stat.percentage = stat.total > 0 ? Math.round((stat.correct / stat.total) * 100) : 0
@@ -290,7 +288,6 @@ const difficultyStats = computed(() => {
   return stats
 })
 
-// Методы
 const getQuestionById = (id: string) => {
   return props.test.questions.find(q => q.id === id)
 }

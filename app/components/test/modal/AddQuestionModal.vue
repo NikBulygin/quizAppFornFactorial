@@ -22,11 +22,9 @@
 const { t } = useI18n()
 
 function cancelAddQuestion() {
-  // Модальное окно закроется автоматически
 }
 
 function addQuestion(question: Partial<TestQuestion>) {
-  // Генерируем id, если его нет
   const newQuestion: TestQuestion = {
     id: question.id || `question-${Date.now()}`,
     title: question.title || '',
@@ -39,7 +37,6 @@ function addQuestion(question: Partial<TestQuestion>) {
     explanation: question.explanation || ''
   }
   
-  // Emit event to parent
   emit('question-added', newQuestion)
 }
 

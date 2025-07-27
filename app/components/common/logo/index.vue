@@ -8,5 +8,4 @@
 </template>
 
 <script setup lang="ts">
-// Компонент логотипа nFactorial
 </script>

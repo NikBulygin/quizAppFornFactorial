@@ -92,7 +92,6 @@
         <UPagination
           v-model="currentPage"
           :total="totalPages"
-          :ui="{ wrapper: 'flex items-center gap-1' }"
         />
       </div>
     </div>
@@ -103,41 +102,40 @@
 const { t } = useI18n()
 const router = useRouter()
 
-// Состояние
+interface PassedTestWithTest extends PassedTest {
+  test?: Test
+}
+
 const loading = ref(true)
 const error = ref<string | null>(null)
-const myTests = ref<PassedTest[]>([])
+const myTests = ref<PassedTestWithTest[]>([])
 const currentPage = ref(1)
 const itemsPerPage = 12
 
-// Фильтры
 const filters = ref({
   search: '',
   status: null as string | null
 })
 
-// Опции статусов
 const statusOptions = computed(() => [
   { label: t('myTests.allStatuses'), value: null },
   { label: t('myTests.status.inProgress'), value: 'in_progress' },
   { label: t('myTests.status.completed'), value: 'completed' },
-  { label: t('myTests.status.cancelled'), value: 'cancelled' }
+  { label: t('myTests.status.cancelled'), value: 'cancelled' },
+  { label: t('myTests.status.created'), value: 'created' }
 ])
 
-// Вычисляемые свойства
 const filteredTests = computed(() => {
   let tests = myTests.value
 
-  // Фильтр по поиску
   if (filters.value.search) {
     const search = filters.value.search.toLowerCase()
     tests = tests.filter(test => 
       test.test?.title.toLowerCase().includes(search) ||
-      test.test?.description.toLowerCase().includes(search)
+      test.test?.description?.toLowerCase().includes(search) || false
     )
   }
 
-  // Фильтр по статусу
   if (filters.value.status) {
     tests = tests.filter(test => test.status === filters.value.status)
   }
@@ -149,37 +147,67 @@ const totalPages = computed(() =>
   Math.ceil(filteredTests.value.length / itemsPerPage)
 )
 
-// Методы
 const loadMyTests = async () => {
   loading.value = true
   error.value = null
   
   try {
-    const response = await $fetch<PassedTestListApiResponse>('/api/passed-test/my')
+    const { user } = useUserSession()
+    const userId = user.value?.id
     
-    if (!response.success || !response.data) {
-      throw new Error(response.error || 'Failed to load tests')
+    if (!userId) {
+      throw new Error('User not authenticated')
     }
 
-    // Загружаем полную информацию о тестах
-    const testsWithData = await Promise.all(
-      response.data.map(async (passedTest) => {
-        try {
-          const testResponse = await $fetch<TestApiResponse>(`/api/test/${passedTest.testId}`)
-          if (testResponse.success && testResponse.data) {
-            return {
-              ...passedTest,
-              test: testResponse.data
-            }
-          }
-        } catch (err) {
-          console.error(`Failed to load test ${passedTest.testId}:`, err)
-        }
-        return passedTest
-      })
-    )
+    const [passedTestsResponse, createdTestsResponse] = await Promise.all([
+      $fetch<PassedTestListApiResponse>('/api/passed-test/my'),
+      $fetch<TestListApiResponse>('/api/test')
+    ])
 
-    myTests.value = testsWithData.filter(test => test.test)
+    const passedTests: PassedTestWithTest[] = []
+    const createdTests: PassedTestWithTest[] = []
+
+    if (passedTestsResponse.success && passedTestsResponse.data) {
+      const passedTestsWithData = await Promise.all(
+        passedTestsResponse.data.map(async (passedTest) => {
+          try {
+            const testResponse = await $fetch<TestApiResponse>(`/api/test/${passedTest.testId}`)
+            if (testResponse.success && testResponse.data) {
+              return {
+                ...passedTest,
+                test: testResponse.data
+              }
+            }
+          } catch {
+          }
+          return passedTest
+        })
+      )
+      passedTests.push(...passedTestsWithData.filter(test => test.test))
+    }
+
+    if (createdTestsResponse.success && createdTestsResponse.data) {
+      const userCreatedTests = createdTestsResponse.data.filter(test => test.authorId === userId)
+      createdTests.push(...userCreatedTests.map(test => ({
+        id: `created-${test.id}`,
+        testId: test.id,
+        userId: userId,
+        status: 'created' as const,
+        startTime: test.createdAt || new Date().toISOString(),
+        endTime: undefined,
+        timeSpent: 0,
+        userAnswers: {},
+        totalScore: 0,
+        maxScore: 0,
+        percentage: 0,
+        isPassed: false,
+        createdAt: test.createdAt || new Date().toISOString(),
+        updatedAt: test.updatedAt || new Date().toISOString(),
+        test: test
+      })))
+    }
+
+    myTests.value = [...passedTests, ...createdTests]
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Unknown error occurred'
   } finally {
@@ -192,7 +220,7 @@ const clearFilters = () => {
   filters.value.status = null
 }
 
-const getTestResult = (passedTest: PassedTest): TestResult | undefined => {
+const getTestResult = (passedTest: PassedTestWithTest): TestResult | undefined => {
   if (passedTest.status !== 'completed') return undefined
   
   return {
@@ -204,7 +232,8 @@ const getTestResult = (passedTest: PassedTest): TestResult | undefined => {
     percentage: passedTest.percentage,
     isPassed: passedTest.isPassed,
     timeSpent: passedTest.timeSpent,
-    completedAt: passedTest.endTime || passedTest.updatedAt
+    completedAt: passedTest.endTime || passedTest.updatedAt,
+    answers: passedTest.userAnswers
   }
 }
 
@@ -212,7 +241,7 @@ const getAttemptsCount = (testId: string): number => {
   return myTests.value.filter(test => test.testId === testId).length
 }
 
-const viewTest = (passedTest: PassedTest) => {
+const viewTest = (passedTest: PassedTestWithTest) => {
   if (passedTest.status === 'in_progress') {
     router.push(`/test/pass/${passedTest.testId}`)
   } else {
@@ -220,7 +249,7 @@ const viewTest = (passedTest: PassedTest) => {
   }
 }
 
-const startTest = async (passedTest: PassedTest) => {
+const startTest = async (passedTest: PassedTestWithTest) => {
   try {
     const response = await $fetch<PassedTestApiResponse>('/api/passed-test', {
       method: 'POST',
@@ -230,12 +259,11 @@ const startTest = async (passedTest: PassedTest) => {
     if (response.success && response.data) {
       router.push(`/test/pass/${passedTest.testId}`)
     }
-  } catch (err) {
-    console.error('Failed to start test:', err)
+  } catch {
   }
 }
 
-const retakeTest = async (passedTest: PassedTest) => {
+const retakeTest = async (passedTest: PassedTestWithTest) => {
   try {
     const response = await $fetch<PassedTestApiResponse>('/api/passed-test', {
       method: 'POST',
@@ -245,16 +273,14 @@ const retakeTest = async (passedTest: PassedTest) => {
     if (response.success && response.data) {
       router.push(`/test/pass/${passedTest.testId}`)
     }
-  } catch (err) {
-    console.error('Failed to retake test:', err)
+  } catch {
   }
 }
 
-const viewResult = (passedTest: PassedTest) => {
+const viewResult = (passedTest: PassedTestWithTest) => {
   router.push(`/test/result/${passedTest.id}`)
 }
 
-// Инициализация
 onMounted(() => {
   loadMyTests()
 })

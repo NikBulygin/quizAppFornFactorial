@@ -22,7 +22,6 @@ export default defineEventHandler(async (event): Promise<PassedTestListApiRespon
 
     const db = getFirestore()
     
-    // Получаем все прохождения тестов пользователя
     const passedTestsSnapshot = await db.collection('passedTests')
       .where('userId', '==', session.user.id)
       .orderBy('createdAt', 'desc')
@@ -42,7 +41,7 @@ export default defineEventHandler(async (event): Promise<PassedTestListApiRespon
     }
 
   } catch (error) {
-    console.error('Error fetching user tests:', error)
+    
     
     return {
       success: false,

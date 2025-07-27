@@ -35,7 +35,6 @@ export default defineEventHandler(async (event): Promise<TestListApiResponse> =>
   }
 
   try {
-    // Initialize Firebase Admin if not already initialized
     if (getApps().length === 0) {
       initializeApp({
         credential: cert(config.firebase.serviceAccount as ServiceAccount)
@@ -49,7 +48,6 @@ export default defineEventHandler(async (event): Promise<TestListApiResponse> =>
     for (const doc of testsSnapshot.docs) {
       const testData = doc.data() as Test
       
-      // Fetch related questions and sections for each test
       const questionsSnapshot = await db.collection('questions')
         .where('testId', '==', testData.id)
         .get()
@@ -86,7 +84,7 @@ export default defineEventHandler(async (event): Promise<TestListApiResponse> =>
     }
 
   } catch (error) {
-    console.error('Error fetching tests:', error)
+    
     
     return {
       success: false,

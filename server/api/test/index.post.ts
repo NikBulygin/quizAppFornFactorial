@@ -34,7 +34,6 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
   }
 
   try {
-    // Initialize Firebase Admin if not already initialized
     if (getApps().length === 0) {
       initializeApp({
         credential: cert(config.firebase.serviceAccount as ServiceAccount)
@@ -44,7 +43,6 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
     const db = getFirestore()
     const testsCollection = db.collection('tests')
 
-    // Validate required fields
     if (!body.title || !body.description || !body.authorId) {
       throw createError({
         statusCode: 400,
@@ -52,7 +50,6 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
       })
     }
 
-    // Create test document with proper structure
     const testData = {
       ...body,
       id: body.id || `test-${Date.now()}`,
@@ -61,10 +58,8 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
       updatedAt: new Date().toISOString()
     }
 
-    // Save test
     await testsCollection.doc(testData.id).set(testData)
     
-    // Save questions separately if they exist
     if (body.questions && body.questions.length > 0) {
       const questionsCollection = db.collection('questions')
       for (const question of body.questions) {
@@ -77,7 +72,6 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
       }
     }
 
-    // Save sections separately if they exist
     if (body.sections && body.sections.length > 0) {
       const sectionsCollection = db.collection('sections')
       for (const section of body.sections) {
@@ -99,7 +93,7 @@ export default defineEventHandler(async (event): Promise<TestApiResponse> => {
     }
 
   } catch (error) {
-    console.error('Error creating test:', error)
+    
     
     return {
       success: false,

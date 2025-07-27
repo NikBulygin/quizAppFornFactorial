@@ -11,7 +11,6 @@ export default defineEventHandler(async (event): Promise<UserApiResponse> => {
   const isOwnProfile = currentUserId === id
 
   try {
-    // Initialize Firebase Admin if not already initialized
     if (getApps().length === 0) {
       initializeApp({
         credential: cert(config.firebase.serviceAccount as ServiceAccount)
@@ -49,7 +48,7 @@ export default defineEventHandler(async (event): Promise<UserApiResponse> => {
     }
 
   } catch (error) {
-    console.error('Error fetching user:', error)
+    
     
     return {
       id: id as string,

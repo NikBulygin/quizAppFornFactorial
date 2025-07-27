@@ -36,21 +36,17 @@ interface Locale {
 
 const { locale, locales, t, setLocale } = useI18n()
 
-// Текущий язык
 const currentLocale = computed(() => locale.value)
 
-// Все локали (включая текущий)
 const allLocales = computed(() => {
   return (locales.value as Locale[])
 })
 
-// Текущий язык
 const currentLanguageName = computed(() => {
   const currentLocale = (locales.value as Locale[]).find(l => l.code === locale.value)
   return currentLocale ? `${getFlag(currentLocale.code)} ${currentLocale.name}` : t('language.selectLanguage')
 })
 
-// Функция для получения флага по коду языка
 const getFlag = (code: string): string => {
   const flagMap: Record<string, string> = {
     'en': '🇺🇸',

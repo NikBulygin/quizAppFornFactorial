@@ -19,7 +19,6 @@ const meta: Meta<typeof LanguageSwitch> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-// Основная история
 export const Default: Story = {
   args: {},
   parameters: {

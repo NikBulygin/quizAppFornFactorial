@@ -246,7 +246,6 @@ const previewTimer = computed(() => ({
   isExpired: false
 }))
 
-// Следим за изменением типа отсчета
 watch(countdownType, (newType) => {
   if (newType === 'deadline') {
     formData.value.timeLimit = undefined
@@ -270,7 +269,6 @@ const formatTime = (seconds: number): string => {
   }
 }
 
-// Валидация
 const _validateForm = () => {
   errors.value = {}
   

@@ -24,12 +24,11 @@
             />
             
             <!-- Фильтр по тегам -->
-            <USelect
+            <UInput
               v-model="filters.tags"
-              :items="availableTags"
               :placeholder="t('testSearch.filterByTags')"
-              multiple
-              @update:model-value="debouncedSearch"
+              icon="i-heroicons-tag"
+              @input="debouncedSearch"
             />
             
             <!-- Фильтр по сложности -->
@@ -51,18 +50,10 @@
           </div>
           
           <!-- Выбранные теги -->
-          <div v-if="filters.tags.length > 0" class="mt-4 flex flex-wrap gap-2">
-            <UBadge
-              v-for="tag in filters.tags"
-              :key="tag"
-              color="primary"
-              variant="soft"
-              class="cursor-pointer"
-              @click="removeTag(tag)"
-            >
-              {{ tag }}
-              <UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1" />
-            </UBadge>
+          <div v-if="filters.tags" class="mt-4">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Выбранные теги: {{ filters.tags }}
+            </p>
           </div>
         </div>
       </div>
@@ -90,10 +81,10 @@
           <TestCard
             v-for="test in tests"
             :key="test.id"
-            :test="test"
+            :test="test as Test"
             clickable
-            @click="viewTest(test)"
-            @start="startTest(test)"
+            @click="viewTest(test as Test)"
+            @start="startTest(test as Test)"
           />
         </div>
 
@@ -119,7 +110,6 @@
           <UPagination
             v-model="currentPage"
             :total="totalPages"
-            :ui="{ wrapper: 'flex items-center gap-1' }"
             @update:model-value="handlePageChange"
           />
         </div>
@@ -147,10 +137,11 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core'
+
 const { t } = useI18n()
 const router = useRouter()
 
-// Состояние
 const loading = ref(false)
 const error = ref<string | null>(null)
 const tests = ref<Test[]>([])
@@ -158,17 +149,14 @@ const total = ref(0)
 const currentPage = ref(1)
 const itemsPerPage = 12
 
-// Фильтры
 const filters = ref({
   search: '',
-  tags: [] as string[],
+  tags: '',
   difficulty: null as string | null
 })
 
-// Сортировка
 const sortBy = ref('relevance')
 
-// Опции
 const difficultyOptions = computed(() => [
   { label: t('testSearch.allDifficulties'), value: null },
   { label: t('question.difficulties.easy'), value: 'easy' },
@@ -183,25 +171,15 @@ const sortOptions = computed(() => [
   { label: t('testSearch.sort.title'), value: 'title' }
 ])
 
-const availableTags = computed(() => {
-  // В реальном приложении здесь был бы API для получения всех доступных тегов
-  return [
-    'математика', 'алгебра', 'геометрия', 'физика', 'химия', 'биология',
-    'история', 'география', 'литература', 'английский', 'программирование'
-  ].map(tag => ({ label: tag, value: tag }))
-})
-
 const totalPages = computed(() => 
   Math.ceil(total.value / itemsPerPage)
 )
 
-// Debounced поиск
 const debouncedSearch = useDebounceFn(() => {
   currentPage.value = 1
   searchTests()
 }, 300)
 
-// Методы
 const searchTests = async () => {
   loading.value = true
   error.value = null
@@ -213,8 +191,8 @@ const searchTests = async () => {
       params.append('search', filters.value.search)
     }
     
-    if (filters.value.tags.length > 0) {
-      params.append('tags', filters.value.tags.join(','))
+    if (filters.value.tags) {
+      params.append('tags', filters.value.tags)
     }
     
     if (filters.value.difficulty) {
@@ -241,15 +219,10 @@ const searchTests = async () => {
 
 const clearFilters = () => {
   filters.value.search = ''
-  filters.value.tags = []
+  filters.value.tags = ''
   filters.value.difficulty = null
   currentPage.value = 1
   searchTests()
-}
-
-const removeTag = (tag: string) => {
-  filters.value.tags = filters.value.tags.filter(t => t !== tag)
-  debouncedSearch()
 }
 
 const handlePageChange = () => {
@@ -270,12 +243,11 @@ const startTest = async (test: Test) => {
     if (response.success && response.data) {
       router.push(`/test/pass/${test.id}`)
     }
-  } catch (err) {
-    console.error('Failed to start test:', err)
+  } catch (error) {
+    console.error('Failed to start test:', error)
   }
 }
 
-// Инициализация
 onMounted(() => {
   searchTests()
 })

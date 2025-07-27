@@ -1,9 +1,56 @@
 export default {
-  hello: 'Hello World',
+  hello: 'Hello world',
   language: {
     selectTitle: 'Language Selection',
     selectLanguage: 'Select Language',
     selectDescription: 'Choose your preferred interface language'
+  },
+  aiTestGenerator: {
+    title: 'AI Test Generator',
+    description: 'Create tests with artificial intelligence. Simply describe the topic and get a ready-made test with questions and answers.',
+    topic: 'Test Topic',
+    topicPlaceholder: 'e.g., Mathematics, History, Programming',
+    topicHelp: 'Specify the main topic or subject for the test',
+    descriptionLabel: 'Description',
+    descriptionPlaceholder: 'Additional test description',
+    descriptionHelp: 'Detailed description of what the test should include',
+    difficulty: 'Difficulty',
+    difficultyHelp: 'Overall difficulty level of questions in the test',
+    easyQuestions: 'Easy Questions',
+    easyQuestionsHelp: 'Number of easy questions (0-50)',
+    mediumQuestions: 'Medium Questions',
+    mediumQuestionsHelp: 'Number of medium questions (0-50)',
+    hardQuestions: 'Hard Questions',
+    hardQuestionsHelp: 'Number of hard questions (0-50)',
+    questionCount: 'Number of Questions',
+    questionCountHelp: 'How many questions should be in the test (5-50)',
+    timeLimit: 'Time (minutes)',
+    timeLimitHelp: 'Time allowed to complete the test (10-180 minutes)',
+    tags: 'Tags',
+    tagsPlaceholder: 'mathematics, algebra, equations',
+    tagsHelp: 'Enter tags separated by commas to categorize the test',
+    additionalPrompts: 'Additional Requirements',
+    additionalPromptsPlaceholder: 'e.g., include graph problems, focus on practical examples',
+    additionalPromptsHelp: 'Special requirements or preferences for test content',
+    generate: 'Generate Test',
+    successTitle: 'Test Generated!',
+    successDescription: 'AI successfully created a test based on your requirements',
+    preview: 'Preview',
+    edit: 'Edit',
+    save: 'Save',
+    regenerate: 'Regenerate',
+    generationError: 'Error generating test',
+    saveError: 'Error saving test',
+    errors: {
+      topicRequired: 'Test topic is required',
+      topicTooShort: 'Topic must be at least 3 characters long',
+      easyQuestionsRange: 'Number of easy questions must be between 0 and 50',
+      mediumQuestionsRange: 'Number of medium questions must be between 0 and 50',
+      hardQuestionsRange: 'Number of hard questions must be between 0 and 50',
+      questionCountRange: 'Number of questions must be between 5 and 50',
+      timeLimitRange: 'Time limit must be between 10 and 180 minutes',
+      noQuestions: 'At least one question count must be specified'
+    }
   },
   home: {
     description: 'Create engaging tests and check knowledge with a modern learning platform',
@@ -93,7 +140,8 @@ export default {
   navigation: {
     home: 'Home',
     findTests: 'Find Tests',
-    myTests: 'My Tests'
+    myTests: 'My Tests',
+    back: 'Back'
   },
   myTests: {
     title: 'My Tests',

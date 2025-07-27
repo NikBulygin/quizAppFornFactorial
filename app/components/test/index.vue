@@ -188,7 +188,6 @@ defineEmits<{
   exit: []
 }>()
 
-// Состояние для выдвигающегося меню навигации
 const isNavigationOpen = ref(false)
 
 const isLastQuestion = computed(() => 

@@ -9,7 +9,6 @@
 <script setup>
 const route = useRoute()
 
-// URL для Storybook
 const storybookUrl = computed(() => {
   const baseUrl = '/storybook/'
   const path = route.path.replace('/storybook', '')

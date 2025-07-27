@@ -89,13 +89,10 @@
 <script setup lang="ts">
 const { t } = useI18n()
 
-// Функция для копирования в буфер обмена
 const copyToClipboard = async (text: string) => {
   try {
     await navigator.clipboard.writeText(text)
-    // Можно добавить уведомление об успешном копировании
   } catch (err) {
-    console.error('Ошибка при копировании:', err)
   }
 }
 </script>

@@ -114,19 +114,15 @@ const route = useRoute()
 const { loggedIn, user, clear } = useUserSession()
 const userStore = useUserStore()
 
-// Получаем ID пользователя из URL
 const userId = route.params.id as string
 
-// Проверяем, является ли это профилем текущего пользователя
 const isOwnProfile = computed(() => {
   return loggedIn.value && user.value?.id === userId
 })
 
-// Загружаем данные пользователя
 const userProfile = ref<UserApiResponse | null>(null)
 const pending = ref(true)
 
-// Заглушка для статистики
 const stats = ref({
   totalQuizzes: 15,
   completedQuizzes: 12,
@@ -134,7 +130,6 @@ const stats = ref({
   totalTimeSpent: 3600
 })
 
-// Загружаем данные при монтировании
 onMounted(async () => {
   try {
     if (userId) {
@@ -142,13 +137,11 @@ onMounted(async () => {
       userProfile.value = data
     }
   } catch (error) {
-    console.error('Error loading user profile:', error)
   } finally {
     pending.value = false
   }
 })
 
-// Функция форматирования даты
 const formatDate = (dateString: string) => {
   if (!dateString) return 'Не указано'
   return new Date(dateString).toLocaleDateString('ru-RU', {

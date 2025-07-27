@@ -175,7 +175,6 @@ export const TestWithManyQuestions: Story = {
       ...mockTest,
       questions: [
         ...mockTest.questions,
-        // Добавляем больше вопросов для демонстрации
         {
           id: 'question-6',
           title: 'What is the primary color?',

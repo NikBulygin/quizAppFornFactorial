@@ -42,7 +42,6 @@ export const compressImage = (
     const img = new Image()
     
     img.onload = () => {
-      // Вычисляем новые размеры с сохранением пропорций
       let { width, height } = img
       
       if (width > maxWidth) {
@@ -58,10 +57,8 @@ export const compressImage = (
       canvas.width = width
       canvas.height = height
       
-      // Рисуем сжатое изображение
       ctx?.drawImage(img, 0, 0, width, height)
       
-      // Конвертируем в blob
       canvas.toBlob(
         (blob) => {
           if (blob) {
@@ -115,10 +112,8 @@ export const handleImageFileUpload = async (
   try {
     let processedFile = file
     
-    // Сжимаем изображение если нужно
     if (compress && file.size > 1024 * 1024) { // Больше 1MB
       const compressedBlob = await compressImage(file)
-      // Создаем новый File из Blob
       processedFile = new File([compressedBlob], file.name, { type: compressedBlob.type })
     }
     

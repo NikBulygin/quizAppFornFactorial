@@ -1,9 +1,6 @@
 export {}
 
 declare global {
-  // ============================================================================
-  // TEST TYPES
-  // ============================================================================
   
   export interface Test {
     id: string
@@ -82,18 +79,12 @@ declare global {
     averageScore?: number
   }
 
-  // ============================================================================
-  // ENUMS
-  // ============================================================================
   
   type QuestionDifficulty = 'easy' | 'medium' | 'hard'
   type TestDifficulty = 'beginner' | 'intermediate' | 'advanced' | 'expert'
   type TestStatus = 'draft' | 'published' | 'archived'
   type QuestionStatus = 'outline' | 'primary' | 'success' | 'error'
 
-  // ============================================================================
-  // TEST PROGRESS TYPES
-  // ============================================================================
   
   interface TestProgress {
     id: string
@@ -118,9 +109,6 @@ declare global {
     points?: number
   }
 
-  // ============================================================================
-  // TEST RESULT TYPES
-  // ============================================================================
   
   export interface TestResult {
     testId: string
@@ -134,9 +122,6 @@ declare global {
     isPassed: boolean
   }
 
-  // ============================================================================
-  // QUESTION BANK TYPES
-  // ============================================================================
   
   interface QuestionBank {
     id: string
@@ -151,9 +136,6 @@ declare global {
     updatedAt: string
   }
 
-  // ============================================================================
-  // TEST CREATION TYPES
-  // ============================================================================
   
   interface TestBuilder {
     test: Test
@@ -169,9 +151,6 @@ declare global {
     targetSectionId?: string
   }
 
-  // ============================================================================
-  // NAVIGATION TYPES
-  // ============================================================================
   
   export interface TestNavigation {
     sections: {
@@ -195,9 +174,6 @@ declare global {
     isCompleted: boolean
   }
 
-  // ============================================================================
-  // TIMER TYPES
-  // ============================================================================
   
   export interface TestTimer {
     mode: 'countdown' | 'time'
@@ -206,9 +182,6 @@ declare global {
     isExpired?: boolean
   }
 
-  // ============================================================================
-  // IMPORT/EXPORT TYPES
-  // ============================================================================
   
   interface TestExport {
     version: string
@@ -233,9 +206,6 @@ declare global {
     warnings: string[]
   }
 
-  // ============================================================================
-  // PROPS TYPES
-  // ============================================================================
   
   interface TestCardProps {
     test: Test

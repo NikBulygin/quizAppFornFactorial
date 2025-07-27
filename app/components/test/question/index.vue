@@ -114,29 +114,21 @@ const emit = defineEmits<{
   answer: [answer: UserAnswer]
 }>()
 
-// Вычисляем количество правильных ответов
 const correctAnswersCount = computed(() => {
   return props.question.correctAnswersCount || props.question.correctAnswerIds?.length || 0
 })
 
-// Проверяем, является ли ответ правильным (в режиме показа ответов)
 const isAnswerCorrect = (_answerId: string) => {
-  // В клиентской версии мы не знаем правильные ответы
-  // Эта функция используется только для отображения результатов
   return false
 }
 
-// Проверяем, выбран ли неправильный ответ пользователем
 const isAnswerIncorrectlySelected = (_answerId: string) => {
-  // В клиентской версии мы не можем определить правильность
   return false
 }
 
-// Реактивные переменные для выбранных ответов
 const selectedSingleAnswer = ref(props.userAnswer?.answerIds?.[0] || '')
 const selectedMultipleAnswers = ref(props.userAnswer?.answerIds || [])
 
-// Обработчик для одного ответа
 const handleSingleAnswer = (answerId: string) => {
   const answer: UserAnswer = {
     questionId: props.question.id,
@@ -145,8 +137,6 @@ const handleSingleAnswer = (answerId: string) => {
   emit('answer', answer)
 }
 
-// Обработчик для нескольких ответов
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const handleMultipleAnswer = (answerIds: any[]) => {
   const answer: UserAnswer = {
     questionId: props.question.id,
