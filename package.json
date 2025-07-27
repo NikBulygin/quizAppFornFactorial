@@ -6,7 +6,7 @@
     "build": "NODE_OPTIONS='--max-old-space-size=4096' nuxt build",
     "prebuild": "bun run build-storybook && bun run copy-storybook",
     "copy-storybook": "rm -rf public/storybook && mkdir -p public/storybook && cp -r storybook-static/* public/storybook/",
-    "postbuild": "echo 'Postbuild script started' && echo 'BUILD_STORYBOOK=$BUILD_STORYBOOK' && echo 'COPY_TO_DIST=$COPY_TO_DIST' && if [ \"$BUILD_STORYBOOK\" = \"true\" ]; then echo 'Copying storybook...' && bun run copy-storybook; fi && if [ \"$COPY_TO_DIST\" = \"true\" ]; then echo 'Copying to dist...' && mkdir -p dist && cp -r .output/public/* dist/ && echo 'Dist folder contents:' && ls -la dist/; fi && echo 'Postbuild script finished'",
+    "postbuild": "echo 'Postbuild script started' && echo 'BUILD_STORYBOOK=$BUILD_STORYBOOK' && echo 'COPY_TO_DIST=$COPY_TO_DIST' && if [ \"$BUILD_STORYBOOK\" = \"true\" ]; then echo 'Copying storybook...' && bun run copy-storybook; fi && if [ \"$COPY_TO_DIST\" = \"true\" ] && [ -d \".output/public\" ]; then echo 'Copying to dist...' && mkdir -p dist && cp -r .output/public/* dist/ && echo 'Dist folder contents:' && ls -la dist/; elif [ \"$COPY_TO_DIST\" = \"true\" ]; then echo 'Warning: .output/public not found, skipping dist copy'; fi && echo 'Postbuild script finished'",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
