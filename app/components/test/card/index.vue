@@ -35,6 +35,27 @@
         <p v-if="test.description" class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
           {{ test.description }}
         </p>
+
+        <!-- Теги -->
+        <div v-if="test.tags && test.tags.length > 0" class="flex flex-wrap gap-1 mt-2">
+          <UBadge
+            v-for="tag in test.tags.slice(0, 3)"
+            :key="tag"
+            color="primary"
+            variant="soft"
+            size="xs"
+          >
+            {{ tag }}
+          </UBadge>
+          <UBadge
+            v-if="test.tags.length > 3"
+            color="neutral"
+            variant="soft"
+            size="xs"
+          >
+            +{{ test.tags.length - 3 }}
+          </UBadge>
+        </div>
       </div>
 
       <!-- Информация о тесте -->

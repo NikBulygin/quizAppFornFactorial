@@ -22,12 +22,40 @@ export default defineNuxtConfig({
       m2mClientId: process.env.NUXT_AUTH0_M2M_CLIENT_ID || 'XA1vRtIYJWmOmqb3Syh15ZN8KupPuZIN',
       m2mClientSecret: process.env.NUXT_AUTH0_M2M_CLIENT_SECRET || 'w8nA8EV-NgXXHQGDGfINkoqkcIHyuYA8roHoS0EQiALOLEHYMTqA27fbDfK_huQ9',
     },
+    // Firebase configuration for Admin SDK
+    firebase: {
+      projectId: 'quizapp-7d44c',
+      clientEmail: 'firebase-adminsdk-fbsvc@quizapp-7d44c.iam.gserviceaccount.com',
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      // Service account credentials
+      serviceAccount: {
+        type: 'service_account',
+        project_id: 'quizapp-7d44c',
+        private_key_id: 'a0ac266fde0049a377db75297e0fffaa79dbecf2',
+        private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        client_email: 'firebase-adminsdk-fbsvc@quizapp-7d44c.iam.gserviceaccount.com',
+        client_id: '111393333239116885309',
+        auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+        token_uri: 'https://oauth2.googleapis.com/token',
+        auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
+        client_x509_cert_url: 'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40quizapp-7d44c.iam.gserviceaccount.com',
+        universe_domain: 'googleapis.com'
+      }
+    },
     public: {
       oauth: {
         auth0: {
           clientId: process.env.NUXT_OAUTH_AUTH0_CLIENT_ID,
           domain: process.env.NUXT_OAUTH_AUTH0_DOMAIN,
         }
+      },
+      firebase: {
+        apiKey: process.env.FIREBASE_APIKEY,
+        authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.FIREBASE_MESSANGING_SENDERID,
+        appId: process.env.FIREBASE_APP_ID,
       }
     }
   },

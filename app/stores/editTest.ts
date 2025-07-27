@@ -2,11 +2,11 @@ import { defineStore } from 'pinia'
 import { ref, readonly } from 'vue'
 
 export const useEditTestStore = defineStore('editTest', () => {
-  // Состояние
   const currentTest = ref<Test | null>(null)
   const isEditing = ref(false)
+  const isLoading = ref(false)
+  const error = ref<string | null>(null)
 
-  // Инициализация из localStorage
   const initializeFromStorage = () => {
     if (import.meta.client) {
       const savedTest = localStorage.getItem('nfactorial-quiz-current-test')
@@ -21,14 +21,12 @@ export const useEditTestStore = defineStore('editTest', () => {
     }
   }
 
-  // Сохранение в localStorage
   const saveToStorage = (test: Test) => {
     if (import.meta.client) {
       localStorage.setItem('nfactorial-quiz-current-test', JSON.stringify(test))
     }
   }
 
-  // Действия
   const setCurrentTest = (test: Test | null) => {
     currentTest.value = test
     if (test) {
@@ -40,7 +38,7 @@ export const useEditTestStore = defineStore('editTest', () => {
     }
   }
 
-  const updateTest = (updates: Partial<Test>) => {
+  const updateTestLocal = (updates: Partial<Test>) => {
     if (currentTest.value) {
       currentTest.value = { ...currentTest.value, ...updates }
       saveToStorage(currentTest.value)
@@ -65,12 +63,10 @@ export const useEditTestStore = defineStore('editTest', () => {
     try {
       const test = JSON.parse(jsonString)
       
-      // Валидация структуры теста
       if (!test.title || !test.questions || !test.sections) {
         throw new Error('Invalid test structure')
       }
       
-      // Генерируем новые ID для избежания конфликтов
       const timestamp = Date.now()
       const newQuestions = test.questions.map((q: TestQuestion) => ({
         ...q,
@@ -79,10 +75,10 @@ export const useEditTestStore = defineStore('editTest', () => {
       
       const newSections = test.sections.map((s: TestSection) => ({
         ...s,
-        id: `section-${timestamp}-${Math.random()}`
+        id: `section-${timestamp}-${Math.random()}`,
+        questionCount: s.questionCount || 5 // Default question count
       }))
       
-      // Создаем карту старых ID к новым
       const questionIdMap = new Map()
       test.questions.forEach((q: TestQuestion, index: number) => {
         questionIdMap.set(q.id, newQuestions[index].id)
@@ -93,14 +89,12 @@ export const useEditTestStore = defineStore('editTest', () => {
         sectionIdMap.set(s.id, newSections[index].id)
       })
       
-      // Обновляем связи с новыми ID
       const newQuestionSectionLinks = test.questionSectionLinks ? 
-        test.questionSectionLinks.map((link: any) => ({
+        test.questionSectionLinks.map((link: { questionId: string; sectionId: string }) => ({
           questionId: questionIdMap.get(link.questionId) || link.questionId,
           sectionId: sectionIdMap.get(link.sectionId) || link.sectionId
         })) : 
-        // Обратная совместимость: создаем связи из старой структуры
-        test.sections.flatMap((section: any) => 
+        test.sections.flatMap((section: TestSection) => 
           (section.questions || []).map((questionId: string) => ({
             questionId: questionIdMap.get(questionId) || questionId,
             sectionId: sectionIdMap.get(section.id) || section.id
@@ -113,6 +107,8 @@ export const useEditTestStore = defineStore('editTest', () => {
         questions: newQuestions,
         sections: newSections,
         questionSectionLinks: newQuestionSectionLinks,
+        authorId: test.authorId || test.author?.id || 'current-user', // Handle both old and new structure
+        tags: test.tags || [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       }
@@ -124,22 +120,135 @@ export const useEditTestStore = defineStore('editTest', () => {
     }
   }
 
-  // Инициализация при создании store
+  // API methods
+  const createTest = async (test: Test, useTestMode = false): Promise<Test> => {
+    isLoading.value = true
+    error.value = null
+    
+    try {
+      const url = useTestMode ? 
+        '/api/test?test=true' : 
+        '/api/test'
+      
+      const response = await $fetch<TestApiResponse>(url, {
+        method: 'POST',
+        body: test
+      })
+      
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Failed to create test')
+      }
+      
+      setCurrentTest(response.data)
+      return response.data
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to create test'
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const updateTestApi = async (testId: string, test: Test, useTestMode = false): Promise<Test> => {
+    isLoading.value = true
+    error.value = null
+    
+    try {
+      const url = useTestMode ? 
+        `/api/test/${testId}?test=true` : 
+        `/api/test/${testId}`
+      
+      const response = await $fetch<TestApiResponse>(url, {
+        method: 'PUT',
+        body: test
+      })
+      
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Failed to update test')
+      }
+      
+      setCurrentTest(response.data)
+      return response.data
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to update test'
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const fetchTest = async (testId: string, useTestMode = false): Promise<Test> => {
+    isLoading.value = true
+    error.value = null
+    
+    try {
+      const url = useTestMode ? 
+        `/api/test/${testId}?test=true` : 
+        `/api/test/${testId}`
+      
+      const response = await $fetch<TestApiResponse>(url)
+      
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Failed to fetch test')
+      }
+      
+      setCurrentTest(response.data)
+      return response.data
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to fetch test'
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  const fetchTests = async (useTestMode = false): Promise<Test[]> => {
+    isLoading.value = true
+    error.value = null
+    
+    try {
+      const url = useTestMode ? 
+        '/api/test?test=true' : 
+        '/api/test'
+      
+      const response = await $fetch<TestListApiResponse>(url)
+      
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Failed to fetch tests')
+      }
+      
+      return response.data
+    } catch (err) {
+      error.value = err instanceof Error ? err.message : 'Failed to fetch tests'
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
   if (import.meta.client) {
     initializeFromStorage()
   }
 
   return {
-    // Состояние
+    // State
     currentTest: readonly(currentTest),
     isEditing: readonly(isEditing),
+    isLoading: readonly(isLoading),
+    error: readonly(error),
     
-    // Действия
+    // Actions
     setCurrentTest,
-    updateTest,
+    updateTest: updateTestLocal,
     clearTest,
     exportTest,
     importTest,
-    setEditing: (editing: boolean) => { isEditing.value = editing }
+    setEditing: (editing: boolean) => { isEditing.value = editing },
+    
+    // API methods
+    createTest,
+    updateTestApi,
+    fetchTest,
+    fetchTests
   }
 }) 

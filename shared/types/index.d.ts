@@ -41,7 +41,7 @@ declare global {
     updatedAt?: string
     loggedInAt?: string
     isOwnProfile: boolean
-    source: 'auth0_api' | 'session_fallback'
+    source: 'auth0_api' | 'session_fallback' | 'firebase' | 'fallback'
     requestedId: string
     currentUserId: string
   }
@@ -72,6 +72,69 @@ declare global {
     email?: string
     picture?: string
     nickname?: string
+  }
+
+  interface TestQuestion {
+    id: string
+    title: string
+    description?: string
+    difficulty: 'easy' | 'medium' | 'hard'
+    points: number
+    answers: TestAnswer[]
+    correctAnswerIds: string[]
+  }
+
+  interface TestAnswer {
+    id: string
+    text: string
+  }
+
+  interface TestSection {
+    id: string
+    title: string
+    description?: string
+    questions: string[]
+    questionCount: number // Количество вопросов для генерации вариантов
+  }
+
+  interface Test {
+    id: string
+    title: string
+    description: string
+    image?: string
+    deadline?: string
+    timeLimit: number
+    randomizeQuestions: boolean
+    randomizeAnswers: boolean
+    difficultyDistribution: {
+      easy: number
+      medium: number
+      hard: number
+    }
+    sections: TestSection[]
+    questions: TestQuestion[]
+    questionSectionLinks?: Array<{
+      questionId: string
+      sectionId: string
+    }>
+    authorId: string // Только ID автора
+    tags: string[] // Массив тегов
+    createdAt: string
+    updatedAt: string
+  }
+
+  interface TestApiResponse {
+    success: boolean
+    data?: Test
+    error?: string
+    message?: string
+  }
+
+  interface TestListApiResponse {
+    success: boolean
+    data?: Test[]
+    error?: string
+    message?: string
   }
 
   interface UserCardProps {

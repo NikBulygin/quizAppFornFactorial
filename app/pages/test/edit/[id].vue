@@ -34,6 +34,7 @@
 
       <div v-else>
         <TestEdit
+          v-if="test"
           :test="test"
           :is-editing="isEditing"
           @save="handleSave"
@@ -48,24 +49,23 @@
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+const editTestStore = useEditTestStore()
 
-// Состояние
 const loading = ref(true)
 const error = ref<string | null>(null)
 const test = ref<Test | null>(null)
 const isEditing = ref(false)
 
-// Получаем ID теста из URL
 const testId = computed(() => route.params.id as string)
 
-// Загрузка теста
 const loadTest = async () => {
   loading.value = true
   error.value = null
   
   try {
     if (testId.value === 'new') {
-      // Создание нового теста
+      const { user } = useUserSession()
+      
       test.value = {
         id: '',
         title: '',
@@ -82,68 +82,15 @@ const loadTest = async () => {
         },
         sections: [],
         questions: [],
-        author: {
-          id: 'current-user',
-          name: 'Current User',
-          email: 'user@example.com',
-          picture: '',
-          role: 'user'
-        },
+        authorId: user.value?.id || 'current-user',
+        tags: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       }
       isEditing.value = false
     } else {
-      // Редактирование существующего теста
-      // Здесь должна быть загрузка теста с сервера
-      // Пока используем мок данные
-      test.value = {
-        id: testId.value,
-        title: 'Sample Test',
-        description: 'This is a sample test for editing',
-        image: 'https://via.placeholder.com/300x200',
-        deadline: '2024-12-31T23:59:59Z',
-        timeLimit: 60,
-        randomizeQuestions: true,
-        randomizeAnswers: false,
-        difficultyDistribution: {
-          easy: 40,
-          medium: 50,
-          hard: 10
-        },
-        sections: [
-          {
-            id: 'section-1',
-            title: 'Basic Questions',
-            description: 'Fundamental concepts',
-            questions: ['question-1', 'question-2']
-          }
-        ],
-        questions: [
-          {
-            id: 'question-1',
-            title: 'What is 2 + 2?',
-            description: 'Basic arithmetic',
-            difficulty: 'easy',
-            points: 1,
-            answers: [
-              { id: 'answer-1', text: '3' },
-              { id: 'answer-2', text: '4' },
-              { id: 'answer-3', text: '5' }
-            ],
-            correctAnswerIds: ['answer-2']
-          }
-        ],
-        author: {
-          id: 'user-1',
-          name: 'John Doe',
-          email: 'john@example.com',
-          picture: 'https://via.placeholder.com/100x100',
-          role: 'user'
-        },
-        createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-01T00:00:00Z'
-      }
+      const fetchedTest = await editTestStore.fetchTest(testId.value, false)
+      test.value = fetchedTest
       isEditing.value = true
     }
   } catch (err) {
@@ -153,34 +100,28 @@ const loadTest = async () => {
   }
 }
 
-// Обработчики событий
 const handleSave = async (savedTest: Test) => {
   try {
-    // Здесь должна быть логика сохранения на сервер
-    console.log('Saving test:', savedTest)
+    if (isEditing.value) {
+      await editTestStore.updateTestApi(testId.value, savedTest, false)
+    } else {
+      await editTestStore.createTest(savedTest, false)
+    }
     
-    // Имитация сохранения
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // Перенаправляем на страницу теста или список тестов
     await router.push('/test/list')
   } catch (err) {
     console.error('Error saving test:', err)
-    // Показать уведомление об ошибке
   }
 }
 
 const handleCancel = () => {
-  // Возвращаемся назад
   router.back()
 }
 
-// Загружаем тест при монтировании компонента
 onMounted(() => {
   loadTest()
 })
 
-// Загружаем тест при изменении ID
 watch(testId, () => {
   loadTest()
 })

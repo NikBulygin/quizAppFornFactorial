@@ -33,6 +33,20 @@
             size="lg"
           />
         </UFormField>
+        <UFormField
+          :label="t('test.edit.sectionQuestionCount')"
+          required
+          class="w-full max-w-xl"
+        >
+          <UInput
+            v-model.number="editedSection.questionCount"
+            type="number"
+            min="1"
+            max="100"
+            :placeholder="t('test.edit.sectionQuestionCountPlaceholder')"
+            size="lg"
+          />
+        </UFormField>
         <div class="flex flex-row gap-6 mt-8">
           <UButton
             variant="outline"
@@ -65,14 +79,16 @@ const props = defineProps<Props>()
 
 const editedSection = ref({
   title: props.section.title,
-  description: props.section.description || ''
+  description: props.section.description || '',
+  questionCount: props.section.questionCount || 1
 })
 
 function updateSection() {
   const section: TestSection = {
     ...props.section,
     title: editedSection.value.title,
-    description: editedSection.value.description
+    description: editedSection.value.description,
+    questionCount: editedSection.value.questionCount
   }
   
   // Emit event to parent
@@ -83,7 +99,8 @@ function cancelEditSection() {
   // Reset form to original values
   editedSection.value = {
     title: props.section.title,
-    description: props.section.description || ''
+    description: props.section.description || '',
+    questionCount: props.section.questionCount || 1
   }
 }
 

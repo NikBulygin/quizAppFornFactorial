@@ -70,6 +70,35 @@
                 />
               </UFormField>
 
+              <!-- Теги -->
+              <UFormField
+                :label="t('test.edit.tags')"
+              >
+                <UInput
+                  v-model="formData.tagsInput"
+                  :placeholder="t('test.edit.tagsPlaceholder')"
+                  @input="updateTags"
+                />
+                <template #help>
+                  {{ t('test.edit.tagsHelp') }}
+                </template>
+              </UFormField>
+
+              <!-- Отображение тегов -->
+              <div v-if="formData.tags.length > 0" class="flex flex-wrap gap-2">
+                <UBadge
+                  v-for="tag in formData.tags"
+                  :key="tag"
+                  color="primary"
+                  variant="soft"
+                  class="cursor-pointer"
+                  @click="removeTag(tag)"
+                >
+                  {{ tag }}
+                  <UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1" />
+                </UBadge>
+              </div>
+
               <!-- Изображение -->
               <UFormField
                 :label="t('test.edit.image')"
@@ -472,7 +501,9 @@ const formData = ref({
   },
   sections: [] as TestSection[],
   questions: [] as TestQuestion[],
-  questionSectionLinks: [] as QuestionSectionLink[]
+  questionSectionLinks: [] as QuestionSectionLink[],
+  tagsInput: '',
+  tags: [] as string[]
 })
 
 // Исправляю инициализация formData через defaultFormData
@@ -487,7 +518,9 @@ const defaultFormData = {
   difficultyDistribution: { easy: 40, medium: 50, hard: 10 },
   sections: [] as TestSection[],
   questions: [] as TestQuestion[],
-  questionSectionLinks: [] as QuestionSectionLink[]
+  questionSectionLinks: [] as QuestionSectionLink[],
+  tagsInput: '',
+  tags: [] as string[]
 }
 
 // Вычисляемые свойства
@@ -551,7 +584,8 @@ onMounted(() => {
       sections: (storedTest.sections as any).map((section: any) => ({
         id: section.id,
         title: section.title,
-        description: section.description
+        description: section.description,
+        questionCount: section.questionCount || 5
       })),
       questions: (storedTest.questions as any).map((question: any) => ({
         id: question.id,
@@ -579,7 +613,9 @@ onMounted(() => {
             questionId,
             sectionId: section.id
           }))
-        )
+        ),
+      tags: storedTest.tags || [],
+      tagsInput: (storedTest.tags || []).join(', ')
     }
   } else if (props.test) {
     formData.value = { 
@@ -587,7 +623,9 @@ onMounted(() => {
       ...props.test, 
       description: props.test.description || '',
       timeLimit: props.test.timeLimit ? String(props.test.timeLimit) : '',
-      questionSectionLinks: props.test.questionSectionLinks || []
+      questionSectionLinks: props.test.questionSectionLinks || [],
+      tags: props.test.tags || [],
+      tagsInput: (props.test.tags || []).join(', ')
     }
   } else {
     formData.value = { ...defaultFormData }
@@ -603,20 +641,15 @@ watch(formData, (newData) => {
       description: newData.description,
       image: newData.image,
       deadline: newData.deadline || undefined,
-      timeLimit: newData.timeLimit ? parseInt(newData.timeLimit) : undefined,
+      timeLimit: newData.timeLimit ? parseInt(newData.timeLimit) : 60,
       randomizeQuestions: newData.randomizeQuestions,
       randomizeAnswers: newData.randomizeAnswers,
       difficultyDistribution: newData.difficultyDistribution,
       sections: newData.sections,
       questions: newData.questions,
       questionSectionLinks: newData.questionSectionLinks,
-      author: props.test?.author || {
-        id: 'current-user',
-        name: 'Current User',
-        email: 'user@example.com',
-        picture: '',
-        role: 'user'
-      },
+      authorId: props.test?.authorId || 'current-user',
+      tags: newData.tags,
       createdAt: props.test?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
@@ -738,20 +771,15 @@ const saveTest = async () => {
       description: formData.value.description,
       image: formData.value.image,
       deadline: formData.value.deadline || undefined,
-      timeLimit: formData.value.timeLimit ? parseInt(formData.value.timeLimit) : undefined,
+      timeLimit: formData.value.timeLimit ? parseInt(formData.value.timeLimit) : 60,
       randomizeQuestions: formData.value.randomizeQuestions,
       randomizeAnswers: formData.value.randomizeAnswers,
       difficultyDistribution: formData.value.difficultyDistribution,
       sections: formData.value.sections,
       questions: formData.value.questions,
       questionSectionLinks: formData.value.questionSectionLinks,
-      author: props.test?.author || {
-        id: 'current-user',
-        name: 'Current User',
-        email: 'user@example.com',
-        picture: '',
-        role: 'user'
-      },
+      authorId: props.test?.authorId || 'current-user',
+      tags: formData.value.tags,
       createdAt: props.test?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
@@ -886,6 +914,18 @@ const handleSectionUpdated = (updatedSection: TestSection) => {
     formData.value.sections[index] = updatedSection
   }
   editingSection.value = null
+}
+
+const updateTags = () => {
+  formData.value.tags = formData.value.tagsInput
+    .split(',')
+    .map(tag => tag.trim())
+    .filter(tag => tag.length > 0)
+}
+
+const removeTag = (tag: string) => {
+  formData.value.tags = formData.value.tags.filter(t => t !== tag)
+  formData.value.tagsInput = formData.value.tags.join(', ')
 }
 </script>
 

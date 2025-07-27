@@ -33,6 +33,20 @@
             size="lg"
           />
         </UFormField>
+        <UFormField
+          :label="t('test.edit.sectionQuestionCount')"
+          required
+          class="w-full max-w-xl"
+        >
+          <UInput
+            v-model.number="newSection.questionCount"
+            type="number"
+            min="1"
+            max="100"
+            :placeholder="t('test.edit.sectionQuestionCountPlaceholder')"
+            size="lg"
+          />
+        </UFormField>
         <div class="flex flex-row gap-6 mt-8">
           <UButton
             variant="outline"
@@ -59,7 +73,8 @@ const { t } = useI18n()
 
 const newSection = ref({
   title: '',
-  description: ''
+  description: '',
+  questionCount: 10
 })
 
 function addSection() {
@@ -67,6 +82,7 @@ function addSection() {
     id: `section-${Date.now()}`,
     title: newSection.value.title,
     description: newSection.value.description,
+    questionCount: newSection.value.questionCount,
     questions: []
   }
   
@@ -74,12 +90,12 @@ function addSection() {
   emit('section-added', section)
   
   // Reset form
-  newSection.value = { title: '', description: '' }
+  newSection.value = { title: '', description: '', questionCount: 10 }
 }
 
 function cancelAddSection() {
   // Reset form
-  newSection.value = { title: '', description: '' }
+  newSection.value = { title: '', description: '', questionCount: 10 }
 }
 
 const emit = defineEmits<{
