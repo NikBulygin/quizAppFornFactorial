@@ -1,9 +1,11 @@
 [build]
-  command = "NODE_OPTIONS='--max-old-space-size=4096' bun run build"
-  publish = ".output/public"
+  command = "echo 'Building with variables:' && echo 'BUILD_STORYBOOK=$BUILD_STORYBOOK' && echo 'COPY_TO_DIST=$COPY_TO_DIST' && NODE_OPTIONS='--max-old-space-size=4096' bun run build"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
+  BUILD_STORYBOOK = "true"
+  COPY_TO_DIST = "true"
 
 [[redirects]]
   from = "/*"
