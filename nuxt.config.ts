@@ -2,11 +2,37 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
-  modules: ['@nuxt/ui', '@nuxt/eslint', '@nuxt/image', '@nuxtjs/i18n', '@nuxtjs/storybook', '@pinia/nuxt', 'nuxt-auth-utils', '@scalar/nuxt'],
+  modules: ['@nuxt/ui', '@nuxt/eslint', '@nuxt/image', '@nuxtjs/i18n', '@pinia/nuxt', 'nuxt-auth-utils', '@scalar/nuxt'],
 
   css: ['~/assets/css/main.css'],
 
   compatibilityDate: '2025-07-16',
+
+  nitro: {
+    compressPublicAssets: true,
+    minify: true,
+    prerender: {
+      crawlLinks: false
+    },
+    publicAssets: [
+      {
+        dir: 'public/storybook',
+        baseURL: '/storybook',
+        maxAge: 60 * 60 * 24 * 7 
+      }
+    ],
+    experimental: {
+      openAPI: true,
+    },
+    openAPI: {
+      meta: {
+        title: 'QuizApp API',
+        description: 'API for creating and managing educational tests',
+        version: '1.0.0'
+      }
+    }
+  },
+
 
   scalar: {
     darkMode: true,
@@ -99,27 +125,22 @@ export default defineNuxtConfig({
     ],
     detectBrowserLanguage: {
       useCookie: true,
-      cookieKey: 'i18nRed',
+      cookieKey: 'i18n_redirected',
       redirectOn: 'root',
-    },
+    }
   },
-  nitro: {
-    publicAssets: [
-      {
-        dir: 'public/storybook',
-        baseURL: '/storybook',
-        maxAge: 60 * 60 * 24 * 7 
-      }
-    ],
-    experimental: {
-      openAPI: true,
-    },
-    openAPI: {
-      meta: {
-        title: 'QuizApp API',
-        description: 'API for creating and managing educational tests',
-        version: '1.0.0'
-      }
+
+  // Оптимизации изображений
+  image: {
+    quality: 80,
+    format: ['webp', 'avif', 'jpg'],
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536,
     }
   }
 })

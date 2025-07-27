@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: quizapp
+    env: node
+    plan: starter
+    buildCommand: NODE_OPTIONS='--max-old-space-size=4096' bun run build
+    startCommand: node .output/server/index.mjs
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=4096
+    healthCheckPath: /
+    autoDeploy: true
+    branch: main 

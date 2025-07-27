@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' nuxt build",
     "prebuild": "bun run build-storybook && bun run copy-storybook",
     "copy-storybook": "rm -rf public/storybook && mkdir -p public/storybook && cp -r storybook-static/* public/storybook/",
     "dev": "nuxt dev",

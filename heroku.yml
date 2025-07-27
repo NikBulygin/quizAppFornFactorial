@@ -1,0 +1,12 @@
+build:
+  docker:
+    web: Dockerfile
+
+env:
+  NODE_VERSION: "20"
+  NODE_OPTIONS: "--max-old-space-size=4096"
+
+formation:
+  web:
+    quantity: 1
+    size: basic 

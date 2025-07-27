@@ -1,0 +1,20 @@
+{
+  "framework": "nuxt",
+  "buildCommand": "NODE_OPTIONS='--max-old-space-size=4096' bun run build",
+  "outputDirectory": ".output/public",
+  "installCommand": "bun install",
+  "functions": {
+    ".output/server/index.mjs": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "NODE_OPTIONS": "--max-old-space-size=4096"
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+} 
