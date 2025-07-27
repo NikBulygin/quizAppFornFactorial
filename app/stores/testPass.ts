@@ -18,6 +18,7 @@ export const useTestPassStore = defineStore('testPass', () => {
   const test = ref<Test | null>(null)
   const originalTest = ref<Test | null>(null) // Оригинальный тест с правильными ответами
   const autoSaveInterval = ref<NodeJS.Timeout | null>(null)
+  const isLoading = ref(false)
 
   // Инициализация из localStorage
   const initializeFromStorage = () => {
@@ -78,9 +79,71 @@ export const useTestPassStore = defineStore('testPass', () => {
     }
   }
 
+  // Восстановление состояния теста с сервера
+  const restoreTestState = async (testId: string) => {
+    if (!import.meta.client) return false
+    
+    isLoading.value = true
+    
+    try {
+      // Проверяем, есть ли активное прохождение теста на сервере
+      const response = await $fetch<PassedTestListApiResponse>('/api/passed-test/my')
+      
+      if (response.success && response.data) {
+        const activeTest = response.data.find(pt => 
+          pt.testId === testId && pt.status === 'in_progress'
+        )
+        
+        if (activeTest) {
+          console.log('🔄 Восстанавливаем состояние теста с сервера:', activeTest)
+          
+          // Загружаем полные данные теста
+          const testResponse = await $fetch<TestApiResponse>(`/api/test/${testId}`)
+          
+          if (testResponse.success && testResponse.data) {
+            // Восстанавливаем состояние
+            currentTestPass.value = {
+              testId: activeTest.testId,
+              currentSectionIndex: 0, // Можно добавить в PassedTest если нужно
+              currentQuestionIndex: 0,
+              userAnswers: activeTest.userAnswers,
+              startTime: activeTest.startTime,
+              lastSaveTime: activeTest.updatedAt,
+              isCompleted: false,
+              timeSpent: activeTest.timeSpent
+            }
+            
+            test.value = sanitizeTestForClient(testResponse.data)
+            originalTest.value = testResponse.data
+            
+            saveToStorage()
+            startAutoSave()
+            
+            isLoading.value = false
+            return true
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error restoring test state:', error)
+    }
+    
+    isLoading.value = false
+    return false
+  }
+
   // Действия
-  const startTest = (testData: Test) => {
+  const startTest = async (testData: Test) => {
     const now = new Date().toISOString()
+    
+    // Проверяем, есть ли уже активное прохождение этого теста
+    const restored = await restoreTestState(testData.id)
+    if (restored) {
+      console.log('✅ Восстановлено активное прохождение теста')
+      return
+    }
+    
+    console.log('🚀 Начинаем новый тест:', testData.id)
     
     currentTestPass.value = {
       testId: testData.id,
@@ -99,6 +162,16 @@ export const useTestPassStore = defineStore('testPass', () => {
     
     saveToStorage()
     startAutoSave()
+    
+    // Создаем запись на сервере
+    try {
+      await $fetch<PassedTestApiResponse>('/api/passed-test', {
+        method: 'POST',
+        body: { testId: testData.id }
+      })
+    } catch (error) {
+      console.error('Error creating test session on server:', error)
+    }
   }
 
   const updateCurrentPosition = (sectionIndex: number, questionIndex: number) => {
@@ -117,10 +190,13 @@ export const useTestPassStore = defineStore('testPass', () => {
       }
       
       saveToStorage()
+      
+      // Сохраняем на сервер
+      saveToServer()
     }
   }
 
-  const completeTest = () => {
+  const completeTest = async () => {
     if (currentTestPass.value) {
       currentTestPass.value.isCompleted = true
       currentTestPass.value.timeSpent = Math.floor(
@@ -128,6 +204,19 @@ export const useTestPassStore = defineStore('testPass', () => {
       )
       saveToStorage()
       stopAutoSave()
+      
+      // Завершаем тест на сервере
+      try {
+        await $fetch<PassedTestApiResponse>(`/api/passed-test/${currentTestPass.value.testId}`, {
+          method: 'PUT',
+          body: {
+            status: 'completed',
+            userAnswers: currentTestPass.value.userAnswers
+          }
+        })
+      } catch (error) {
+        console.error('Error completing test on server:', error)
+      }
     }
   }
 
@@ -140,6 +229,25 @@ export const useTestPassStore = defineStore('testPass', () => {
     if (import.meta.client) {
       localStorage.removeItem('nfactorial-quiz-test-pass')
       localStorage.removeItem('nfactorial-quiz-test-data')
+    }
+  }
+
+  // Сохранение на сервер
+  const saveToServer = async () => {
+    if (!currentTestPass.value) return
+    
+    try {
+      await $fetch<PassedTestApiResponse>(`/api/passed-test/${currentTestPass.value.testId}`, {
+        method: 'PUT',
+        body: {
+          userAnswers: currentTestPass.value.userAnswers,
+          timeSpent: Math.floor(
+            (Date.now() - new Date(currentTestPass.value.startTime).getTime()) / 1000
+          )
+        }
+      })
+    } catch (error) {
+      console.error('Error saving to server:', error)
     }
   }
 
@@ -166,9 +274,7 @@ export const useTestPassStore = defineStore('testPass', () => {
         )
         
         saveToStorage()
-        
-        // В будущем здесь будет серверный запрос
-        // await api.saveTestProgress(currentTestPass.value)
+        saveToServer()
       }
     }, 5 * 60 * 1000) // 5 минут
   }
@@ -193,13 +299,17 @@ export const useTestPassStore = defineStore('testPass', () => {
     if (!currentSection) return null
     
     const questionsInSection = test.value.questions.filter(q => 
-      test.value!.questionSectionLinks.some((link: QuestionSectionLink) => 
+      test.value!.questionSectionLinks?.some((link) => 
         link.questionId === q.id && link.sectionId === currentSection.id
-      )
+      ) || true // Если нет связей, показываем все вопросы
     )
     
     return questionsInSection[currentTestPass.value.currentQuestionIndex] || null
   })
+
+  const currentQuestionIndex = computed(() => 
+    currentTestPass.value?.currentQuestionIndex || 0
+  )
 
   const totalQuestions = computed(() => {
     if (!test.value) return 0
@@ -285,10 +395,12 @@ export const useTestPassStore = defineStore('testPass', () => {
     currentTestPass,
     test,
     originalTest,
+    isLoading,
     
     // Вычисляемые свойства
     hasActiveTest,
     currentQuestion,
+    currentQuestionIndex,
     totalQuestions,
     answeredQuestionsCount,
     questionStatuses,
@@ -302,6 +414,8 @@ export const useTestPassStore = defineStore('testPass', () => {
     startAutoSave,
     stopAutoSave,
     isAnswerCorrect,
-    getQuestionStatus
+    getQuestionStatus,
+    restoreTestState,
+    saveToServer
   }
 }) 

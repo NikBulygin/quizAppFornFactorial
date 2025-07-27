@@ -6,6 +6,25 @@ export default {
     selectDescription: 'Choose your preferred interface language'
   },
   home: {
+    description: 'Create engaging tests and check knowledge with a modern learning platform',
+    createTest: 'Create Test',
+    takeTest: 'Take Test',
+    create: {
+      title: 'Create',
+      description: 'Easily create tests with various question types and settings'
+    },
+    share: {
+      title: 'Share',
+      description: 'Publish tests and share them with colleagues and students'
+    },
+    analyze: {
+      title: 'Analyze',
+      description: 'Get detailed statistics and analytics of results'
+    },
+    seo: {
+      title: 'QuizApp - Create and Take Tests',
+      description: 'Modern platform for creating and taking educational tests. Create engaging tests and check knowledge.'
+    },
     timerExamples: 'Timer Examples',
     countdownDeadline: 'Countdown to Deadline',
     countdownTimeLimit: 'Countdown with Time Limit',
@@ -72,28 +91,45 @@ export default {
     }
   },
   navigation: {
-    title: 'Test Navigation',
-    description: 'Navigation through test sections and questions',
-    sections: 'Sections',
-    questions: 'Questions',
-    progress: 'Progress',
-    finishTest: 'Finish Test',
-    finishTestEarly: 'Finish Test Early',
-    finish: 'Finish',
-    cancel: 'Cancel',
-    back: 'Back',
-    confirmation: {
-      title: 'Confirm Test Completion',
-      description: 'Are you sure you want to finish the test early? Unanswered questions will be counted as incorrect.'
-    },
+    home: 'Home',
+    findTests: 'Find Tests',
+    myTests: 'My Tests'
+  },
+  myTests: {
+    title: 'My Tests',
+    description: 'Manage your tests and view results',
+    searchPlaceholder: 'Search by title...',
+    filterByStatus: 'Filter by status',
+    clearFilters: 'Clear filters',
+    allStatuses: 'All statuses',
     status: {
-      notAnswered: 'Not answered',
-      answered: 'Answered',
-      correct: 'Correct',
-      incorrect: 'Incorrect',
-      current: 'Current',
-      legend: 'Status Legend'
-    }
+      inProgress: 'In progress',
+      completed: 'Completed',
+      cancelled: 'Cancelled'
+    },
+    noTests: 'No tests found',
+    noTestsDescription: 'You don\'t have any passed tests yet. Find interesting tests and start taking them!',
+    findTests: 'Find tests'
+  },
+  testSearch: {
+    title: 'Test Search',
+    description: 'Find interesting tests to take',
+    searchPlaceholder: 'Search by title, description or tags...',
+    filterByTags: 'Filter by tags',
+    filterByDifficulty: 'Filter by difficulty',
+    allDifficulties: 'All difficulties',
+    search: 'Search',
+    resultsCount: 'Found {found} of {count} tests',
+    sortBy: 'Sort by',
+    sort: {
+      relevance: 'By relevance',
+      newest: 'Newest first',
+      oldest: 'Oldest first',
+      title: 'By title'
+    },
+    noResults: 'No tests found',
+    noResultsDescription: 'Try changing search parameters or filters',
+    clearFilters: 'Clear filters'
   },
   test: {
     edit: {
@@ -134,6 +170,8 @@ export default {
       sectionTitlePlaceholder: 'Enter section title',
       sectionDescription: 'Section Description',
       sectionDescriptionPlaceholder: 'Section description',
+      sectionQuestionCount: 'Question Count',
+      sectionQuestionCountPlaceholder: '10',
       allDifficulties: 'All difficulties',
       actions: {
         cancel: 'Cancel',
@@ -159,12 +197,20 @@ export default {
       selectedFile: 'Selected File'
     },
     pass: {
+      loading: 'Loading test...',
+      restoring: 'Restoring progress...',
+      error: 'Error loading test',
+      retry: 'Try again',
+      backToSearch: 'Back to search',
       exit: 'Exit',
+      exitConfirmation: 'Are you sure you want to exit? All progress will be lost.',
       noQuestion: 'Question not found',
       previous: 'Previous',
       next: 'Next',
-      finish: 'Finish',
-      questionProgress: '{current} of {total}',
+      finish: 'Finish test',
+      questionProgress: 'Question {current} of {total}',
+      answered: 'answered',
+      time: 'time',
       testNotFound: 'Test not found',
       instructions: 'Instructions',
       instruction1: 'Read questions carefully',
@@ -172,8 +218,43 @@ export default {
       instruction2: 'Watch your time',
       instruction2Desc: 'You have limited time to complete the test',
       instruction3: 'Progress is saved automatically',
-      instruction3Desc: 'Your answers are saved every 5 minutes',
-      exitConfirmation: 'Are you sure you want to exit? All progress will be lost.'
+      instruction3Desc: 'Your answers are saved every 5 minutes'
+    },
+    result: {
+      title: 'Test Results',
+      loading: 'Loading results...',
+      error: 'Error loading results',
+      retry: 'Try again',
+      notFound: 'Test results not found',
+      loadError: 'Failed to load results',
+      testLoadError: 'Failed to load test data',
+      percentage: 'Completion percentage',
+      score: 'Score',
+      timeSpent: 'Time spent',
+      passed: 'Test passed!',
+      failed: 'Test failed',
+      congratulations: 'Congratulations! You have successfully passed the test.',
+      notEnoughPoints: 'Unfortunately, you did not score enough points to pass the test.',
+      detailedAnswers: 'Detailed answers',
+      findOtherTests: 'Find other tests',
+      myTests: 'My tests',
+      totalScore: 'Total score',
+      status: 'Status',
+      scoreBreakdown: 'Score breakdown',
+      overallProgress: 'Overall progress',
+      byDifficulty: 'By difficulty',
+      timeAnalysis: 'Time analysis',
+      completionTime: 'Completion time',
+      averageTimePerQuestion: 'Average time per question',
+      completedAt: 'Completed at',
+      timeLimit: 'Time limit',
+      question: 'Question',
+      correct: 'Correct',
+      incorrect: 'Incorrect',
+      selectedAnswers: 'Selected answers',
+      retakeTest: 'Retake test',
+      shareResult: 'Share result',
+      downloadCertificate: 'Download certificate'
     },
     card: {
       questions: 'questions',

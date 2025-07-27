@@ -6,6 +6,25 @@ export default {
     selectDescription: 'Выберите предпочитаемый язык интерфейса'
   },
   home: {
+    description: 'Создавайте увлекательные тесты и проверяйте знания с помощью современной платформы для обучения',
+    createTest: 'Создать тест',
+    takeTest: 'Пройти тест',
+    create: {
+      title: 'Создавайте',
+      description: 'Легко создавайте тесты с различными типами вопросов и настройками'
+    },
+    share: {
+      title: 'Делитесь',
+      description: 'Публикуйте тесты и делитесь ими с коллегами и студентами'
+    },
+    analyze: {
+      title: 'Анализируйте',
+      description: 'Получайте детальную статистику и аналитику результатов'
+    },
+    seo: {
+      title: 'QuizApp - Создавайте и проходите тесты',
+      description: 'Современная платформа для создания и прохождения образовательных тестов. Создавайте увлекательные тесты и проверяйте знания.'
+    },
     timerExamples: 'Примеры таймеров',
     countdownDeadline: 'Обратный отсчет до дедлайна',
     countdownTimeLimit: 'Обратный отсчет с лимитом времени',
@@ -113,28 +132,9 @@ export default {
     }
   },
   navigation: {
-    title: 'Навигация по тесту',
-    description: 'Навигация по разделам и вопросам теста',
-    sections: 'Разделы',
-    questions: 'Вопросы',
-    progress: 'Прогресс',
-    finishTest: 'Завершить тест',
-    finishTestEarly: 'Завершить тест досрочно',
-    finish: 'Завершить',
-    cancel: 'Отмена',
-    confirmation: {
-      title: 'Подтверждение завершения теста',
-      description: 'Вы точно хотите завершить тест досрочно? Неотвеченные вопросы будут засчитаны как неправильные.'
-    },
-    status: {
-      notAnswered: 'Не отвечено',
-      answered: 'Отвечено',
-      correct: 'Правильно',
-      incorrect: 'Неправильно',
-      current: 'Текущий',
-      legend: 'Легенда статусов'
-    },
-    back: 'Назад'
+    home: 'Главная',
+    findTests: 'Найти тесты',
+    myTests: 'Мои тесты'
   },
   test: {
     edit: {
@@ -175,6 +175,8 @@ export default {
       sectionTitlePlaceholder: 'Введите название раздела',
       sectionDescription: 'Описание раздела',
       sectionDescriptionPlaceholder: 'Описание раздела',
+      sectionQuestionCount: 'Количество вопросов',
+      sectionQuestionCountPlaceholder: '10',
       allDifficulties: 'Все сложности',
       actions: {
         cancel: 'Отмена',
@@ -198,12 +200,20 @@ export default {
       selectedFile: 'Выбранный файл'
     },
     pass: {
+      loading: 'Загружаем тест...',
+      restoring: 'Восстанавливаем прогресс...',
+      error: 'Ошибка загрузки теста',
+      retry: 'Попробовать снова',
+      backToSearch: 'Назад к поиску',
       exit: 'Выйти',
+      exitConfirmation: 'Вы уверены, что хотите выйти? Весь прогресс будет потерян.',
       noQuestion: 'Вопрос не найден',
-      previous: 'Назад',
-      next: 'Далее',
-      finish: 'Завершить',
-      questionProgress: '{current} из {total}',
+      previous: 'Предыдущий',
+      next: 'Следующий',
+      finish: 'Завершить тест',
+      questionProgress: 'Вопрос {current} из {total}',
+      answered: 'отвечено',
+      time: 'время',
       testNotFound: 'Тест не найден',
       instructions: 'Инструкции',
       instruction1: 'Внимательно читайте вопросы',
@@ -211,8 +221,43 @@ export default {
       instruction2: 'Следите за временем',
       instruction2Desc: 'У вас есть ограниченное время на прохождение теста',
       instruction3: 'Прогресс сохраняется автоматически',
-      instruction3Desc: 'Ваши ответы сохраняются каждые 5 минут',
-      exitConfirmation: 'Вы уверены, что хотите выйти? Весь прогресс будет потерян.'
+      instruction3Desc: 'Ваши ответы сохраняются каждые 5 минут'
+    },
+    result: {
+      title: 'Результаты теста',
+      loading: 'Загружаем результаты...',
+      error: 'Ошибка загрузки результатов',
+      retry: 'Попробовать снова',
+      notFound: 'Результаты теста не найдены',
+      loadError: 'Не удалось загрузить результаты',
+      testLoadError: 'Не удалось загрузить данные теста',
+      percentage: 'Процент выполнения',
+      score: 'Баллы',
+      timeSpent: 'Время прохождения',
+      passed: 'Тест пройден!',
+      failed: 'Тест не пройден',
+      congratulations: 'Поздравляем! Вы успешно прошли тест.',
+      notEnoughPoints: 'К сожалению, вы не набрали достаточно баллов для прохождения теста.',
+      detailedAnswers: 'Детальные ответы',
+      findOtherTests: 'Найти другие тесты',
+      myTests: 'Мои тесты',
+      totalScore: 'Общий балл',
+      status: 'Статус',
+      scoreBreakdown: 'Разбор баллов',
+      overallProgress: 'Общий прогресс',
+      byDifficulty: 'По сложности',
+      timeAnalysis: 'Анализ времени',
+      completionTime: 'Время завершения',
+      averageTimePerQuestion: 'Среднее время на вопрос',
+      completedAt: 'Завершено',
+      timeLimit: 'Временной лимит',
+      question: 'Вопрос',
+      correct: 'Правильно',
+      incorrect: 'Неправильно',
+      selectedAnswers: 'Выбранные ответы',
+      retakeTest: 'Пересдать тест',
+      shareResult: 'Поделиться результатом',
+      downloadCertificate: 'Скачать сертификат'
     },
     card: {
       questions: 'вопросов',

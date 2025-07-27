@@ -6,12 +6,31 @@ export default {
     selectDescription: '选择您偏好的界面语言'
   },
   home: {
+    description: '使用现代学习平台创建引人入胜的测试并检查知识',
+    createTest: '创建测试',
+    takeTest: '参加测试',
+    create: {
+      title: '创建',
+      description: '轻松创建具有各种问题类型和设置的测试'
+    },
+    share: {
+      title: '分享',
+      description: '发布测试并与同事和学生分享'
+    },
+    analyze: {
+      title: '分析',
+      description: '获得详细统计和结果分析'
+    },
+    seo: {
+      title: 'QuizApp - 创建和参加测试',
+      description: '用于创建和参加教育测试的现代平台。创建引人入胜的测试并检查知识。'
+    },
     timerExamples: '计时器示例',
     countdownDeadline: '截止日期倒计时',
     countdownTimeLimit: '带时间限制的倒计时',
     currentTime: '当前时间',
     expiredTimer: '过期计时器',
-    warningActive: '活动警告',
+    warningActive: '活跃警告',
     noWarning: '无警告',
     questionExamples: '问题示例',
     singleChoiceQuestion: '单选题',
@@ -140,6 +159,9 @@ export default {
       titlePlaceholder: '输入测试标题',
       description: '描述',
       descriptionPlaceholder: '测试描述',
+      tags: '标签',
+      tagsPlaceholder: '数学, 代数, 方程',
+      tagsHelp: '输入逗号分隔的标签来分类测试',
       image: '图片',
       timeSettings: '时间设置',
       deadline: '截止日期',
@@ -150,20 +172,25 @@ export default {
       randomizeQuestions: '随机化问题顺序',
       randomizeAnswers: '随机化答案顺序',
       difficultyDistribution: '难度分布',
-      questionBank: '问题库',
+      totalPercentage: '总百分比',
+      resetDistribution: '重置分布',
+      questionBank: '题库',
       addQuestion: '添加问题',
       filterByDifficulty: '按难度筛选',
       searchQuestions: '搜索问题',
-      selectedQuestions: '已选问题：{count}',
+      selectedQuestions: '已选问题: {count}',
       assignToSection: '分配到章节',
       assign: '分配',
       sections: '章节',
       addSection: '添加章节',
+      editSection: '编辑章节',
       questions: '问题',
       sectionTitle: '章节标题',
       sectionTitlePlaceholder: '输入章节标题',
       sectionDescription: '章节描述',
       sectionDescriptionPlaceholder: '章节描述',
+      sectionQuestionCount: '问题数量',
+      sectionQuestionCountPlaceholder: '10',
       allDifficulties: '所有难度',
       actions: {
         cancel: '取消',
@@ -173,16 +200,78 @@ export default {
         preview: '预览'
       },
       errors: {
-        titleRequired: '测试标题是必需的'
-      }
+        titleRequired: '测试标题是必需的',
+        fileRequired: '请选择要导入的文件',
+        invalidFileType: '无效的文件类型。请选择JSON文件'
+      },
+      importTest: '导入测试',
+      importTestDescription: '从JSON文件导入测试或粘贴JSON结构',
+      importJson: '测试JSON',
+      importJsonPlaceholder: '粘贴测试JSON结构...',
+      importText: '文本',
+      importFile: '文件',
+      selectFile: '选择文件',
+      selectedFile: '已选文件'
     },
     pass: {
+      loading: '加载测试中...',
+      restoring: '恢复进度中...',
+      error: '加载测试时出错',
+      retry: '重试',
+      backToSearch: '返回搜索',
       exit: '退出',
+      exitConfirmation: '您确定要退出吗？所有进度都将丢失。',
       noQuestion: '未找到问题',
       previous: '上一个',
       next: '下一个',
-      finish: '完成',
-      questionProgress: '{current} / {total}'
+      finish: '完成测试',
+      questionProgress: '问题 {current} / {total}',
+      answered: '已回答',
+      time: '时间',
+      testNotFound: '未找到测试',
+      instructions: '说明',
+      instruction1: '仔细阅读问题',
+      instruction1Desc: '在选择答案之前确保您理解问题',
+      instruction2: '注意时间',
+      instruction2Desc: '您有有限的时间完成测试',
+      instruction3: '进度会自动保存',
+      instruction3Desc: '您的答案每5分钟保存一次'
+    },
+    result: {
+      title: '测试结果',
+      loading: '加载结果中...',
+      error: '加载结果时出错',
+      retry: '重试',
+      notFound: '未找到测试结果',
+      loadError: '无法加载结果',
+      testLoadError: '无法加载测试数据',
+      percentage: '完成百分比',
+      score: '分数',
+      timeSpent: '花费时间',
+      passed: '测试通过！',
+      failed: '测试未通过',
+      congratulations: '恭喜！您成功通过了测试。',
+      notEnoughPoints: '很遗憾，您没有获得足够的分数来通过测试。',
+      detailedAnswers: '详细答案',
+      findOtherTests: '查找其他测试',
+      myTests: '我的测试',
+      totalScore: '总分',
+      status: '状态',
+      scoreBreakdown: '分数分解',
+      overallProgress: '总体进度',
+      byDifficulty: '按难度',
+      timeAnalysis: '时间分析',
+      completionTime: '完成时间',
+      averageTimePerQuestion: '每题平均时间',
+      completedAt: '完成于',
+      timeLimit: '时间限制',
+      question: '问题',
+      correct: '正确',
+      incorrect: '错误',
+      selectedAnswers: '选择的答案',
+      retakeTest: '重新参加测试',
+      shareResult: '分享结果',
+      downloadCertificate: '下载证书'
     },
     card: {
       questions: '问题',
@@ -195,7 +284,7 @@ export default {
       failed: '未通过',
       attempts: '尝试',
       viewResult: '查看结果',
-      retake: '重考',
+      retake: '重新参加',
       start: '开始',
       expired: '已过期',
       today: '今天',
@@ -264,7 +353,35 @@ export default {
   layout: {
     author: {
       withLove: '用爱制作',
-      contacts: '联系方式'
+      name: 'Bulygin Nikita',
+      contacts: '作者联系方式',
+      contactsDescription: '以任何方便的方式联系我',
+      copy: '复制'
+    }
+  },
+  auth: {
+    signIn: '登录',
+    signOut: '登出',
+    profile: '个人资料',
+    myProfile: '我的个人资料',
+    userProfile: '用户个人资料',
+    notAuthenticated: '需要身份验证',
+    notAuthenticatedDescription: '请登录以继续',
+    userNotFound: '未找到用户',
+    userNotFoundDescription: '指定ID的用户不存在'
+  },
+  user: {
+    profile: {
+      title: '个人资料',
+      information: '个人资料信息',
+      statistics: '统计',
+      actions: '操作',
+      editProfile: '编辑个人资料',
+      totalQuizzes: '总测验数',
+      completedQuizzes: '已完成',
+      averageScore: '平均分数',
+      registeredAt: '注册时间',
+      noName: '无姓名'
     }
   }
 } 

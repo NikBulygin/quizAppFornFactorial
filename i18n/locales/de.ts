@@ -6,6 +6,25 @@ export default {
     selectDescription: 'Wählen Sie die bevorzugte Sprache der Benutzeroberfläche'
   },
   home: {
+    description: 'Erstellen Sie fesselnde Tests und überprüfen Sie Wissen mit einer modernen Lernplattform',
+    createTest: 'Test erstellen',
+    takeTest: 'Test machen',
+    create: {
+      title: 'Erstellen',
+      description: 'Erstellen Sie einfach Tests mit verschiedenen Fragetypen und Einstellungen'
+    },
+    share: {
+      title: 'Teilen',
+      description: 'Veröffentlichen Sie Tests und teilen Sie sie mit Kollegen und Studenten'
+    },
+    analyze: {
+      title: 'Analysieren',
+      description: 'Erhalten Sie detaillierte Statistiken und Analysen der Ergebnisse'
+    },
+    seo: {
+      title: 'QuizApp - Tests erstellen und machen',
+      description: 'Moderne Plattform zum Erstellen und Durchführen von Bildungstests. Erstellen Sie fesselnde Tests und überprüfen Sie Wissen.'
+    },
     timerExamples: 'Timer-Beispiele',
     countdownDeadline: 'Countdown bis zur Deadline',
     countdownTimeLimit: 'Countdown mit Zeitlimit',
@@ -140,9 +159,12 @@ export default {
       titlePlaceholder: 'Test-Titel eingeben',
       description: 'Beschreibung',
       descriptionPlaceholder: 'Test-Beschreibung',
+      tags: 'Tags',
+      tagsPlaceholder: 'Mathematik, Algebra, Gleichungen',
+      tagsHelp: 'Geben Sie Tags durch Kommas getrennt ein, um den Test zu kategorisieren',
       image: 'Bild',
       timeSettings: 'Zeiteinstellungen',
-      deadline: 'Deadline',
+      deadline: 'Frist',
       timeLimit: 'Zeitlimit (Minuten)',
       timeLimitPlaceholder: '60',
       timeLimitHelp: 'Zeit, die zum Abschließen des Tests erlaubt ist',
@@ -161,11 +183,14 @@ export default {
       assign: 'Zuweisen',
       sections: 'Abschnitte',
       addSection: 'Abschnitt hinzufügen',
+      editSection: 'Abschnitt bearbeiten',
       questions: 'Fragen',
-      sectionTitle: 'Abschnitt-Titel',
-      sectionTitlePlaceholder: 'Abschnitt-Titel eingeben',
-      sectionDescription: 'Abschnitt-Beschreibung',
-      sectionDescriptionPlaceholder: 'Abschnitt-Beschreibung',
+      sectionTitle: 'Abschnittstitel',
+      sectionTitlePlaceholder: 'Abschnittstitel eingeben',
+      sectionDescription: 'Abschnittsbeschreibung',
+      sectionDescriptionPlaceholder: 'Abschnittsbeschreibung',
+      sectionQuestionCount: 'Anzahl der Fragen',
+      sectionQuestionCountPlaceholder: '10',
       allDifficulties: 'Alle Schwierigkeiten',
       actions: {
         cancel: 'Abbrechen',
@@ -175,22 +200,84 @@ export default {
         preview: 'Vorschau'
       },
       errors: {
-        titleRequired: 'Test-Titel ist erforderlich'
-      }
+        titleRequired: 'Test-Titel ist erforderlich',
+        fileRequired: 'Bitte wählen Sie eine Datei zum Importieren aus',
+        invalidFileType: 'Ungültiger Dateityp. Bitte wählen Sie eine JSON-Datei'
+      },
+      importTest: 'Test importieren',
+      importTestDescription: 'Importieren Sie einen Test aus einer JSON-Datei oder fügen Sie die JSON-Struktur ein',
+      importJson: 'Test JSON',
+      importJsonPlaceholder: 'JSON-Struktur des Tests einfügen...',
+      importText: 'Text',
+      importFile: 'Datei',
+      selectFile: 'Datei auswählen',
+      selectedFile: 'Ausgewählte Datei'
     },
     pass: {
+      loading: 'Test wird geladen...',
+      restoring: 'Fortschritt wird wiederhergestellt...',
+      error: 'Fehler beim Laden des Tests',
+      retry: 'Erneut versuchen',
+      backToSearch: 'Zurück zur Suche',
       exit: 'Beenden',
+      exitConfirmation: 'Sind Sie sicher, dass Sie beenden möchten? Der gesamte Fortschritt geht verloren.',
       noQuestion: 'Frage nicht gefunden',
       previous: 'Zurück',
       next: 'Weiter',
-      finish: 'Beenden',
-      questionProgress: '{current} von {total}'
+      finish: 'Test beenden',
+      questionProgress: 'Frage {current} von {total}',
+      answered: 'beantwortet',
+      time: 'Zeit',
+      testNotFound: 'Test nicht gefunden',
+      instructions: 'Anweisungen',
+      instruction1: 'Lesen Sie die Fragen sorgfältig',
+      instruction1Desc: 'Stellen Sie sicher, dass Sie die Frage verstehen, bevor Sie eine Antwort wählen',
+      instruction2: 'Achten Sie auf Ihre Zeit',
+      instruction2Desc: 'Sie haben begrenzte Zeit, um den Test abzuschließen',
+      instruction3: 'Der Fortschritt wird automatisch gespeichert',
+      instruction3Desc: 'Ihre Antworten werden alle 5 Minuten gespeichert'
+    },
+    result: {
+      title: 'Testergebnisse',
+      loading: 'Ergebnisse werden geladen...',
+      error: 'Fehler beim Laden der Ergebnisse',
+      retry: 'Erneut versuchen',
+      notFound: 'Testergebnisse nicht gefunden',
+      loadError: 'Ergebnisse konnten nicht geladen werden',
+      testLoadError: 'Testdaten konnten nicht geladen werden',
+      percentage: 'Abschlussprozentsatz',
+      score: 'Punktzahl',
+      timeSpent: 'Verbrachte Zeit',
+      passed: 'Test bestanden!',
+      failed: 'Test nicht bestanden',
+      congratulations: 'Glückwunsch! Sie haben den Test erfolgreich bestanden.',
+      notEnoughPoints: 'Leider haben Sie nicht genügend Punkte gesammelt, um den Test zu bestehen.',
+      detailedAnswers: 'Detaillierte Antworten',
+      findOtherTests: 'Andere Tests finden',
+      myTests: 'Meine Tests',
+      totalScore: 'Gesamtpunktzahl',
+      status: 'Status',
+      scoreBreakdown: 'Punktzahlaufschlüsselung',
+      overallProgress: 'Gesamtfortschritt',
+      byDifficulty: 'Nach Schwierigkeit',
+      timeAnalysis: 'Zeitanalyse',
+      completionTime: 'Abschlusszeit',
+      averageTimePerQuestion: 'Durchschnittliche Zeit pro Frage',
+      completedAt: 'Abgeschlossen um',
+      timeLimit: 'Zeitlimit',
+      question: 'Frage',
+      correct: 'Richtig',
+      incorrect: 'Falsch',
+      selectedAnswers: 'Ausgewählte Antworten',
+      retakeTest: 'Test wiederholen',
+      shareResult: 'Ergebnis teilen',
+      downloadCertificate: 'Zertifikat herunterladen'
     },
     card: {
       questions: 'Fragen',
       minutes: 'Minuten',
       yourResult: 'Ihr Ergebnis',
-      completedAt: 'Abgeschlossen am',
+      completedAt: 'Abgeschlossen um',
       totalPoints: 'Gesamtpunkte',
       estimatedTime: 'Geschätzte Zeit',
       passed: 'Bestanden',
@@ -266,7 +353,35 @@ export default {
   layout: {
     author: {
       withLove: 'Mit Liebe',
-      contacts: 'Kontakte'
+      name: 'Bulygin Nikita',
+      contacts: 'Autor-Kontakte',
+      contactsDescription: 'Kontaktieren Sie mich auf bequeme Weise',
+      copy: 'Kopieren'
+    }
+  },
+  auth: {
+    signIn: 'Anmelden',
+    signOut: 'Abmelden',
+    profile: 'Profil',
+    myProfile: 'Mein Profil',
+    userProfile: 'Benutzerprofil',
+    notAuthenticated: 'Authentifizierung erforderlich',
+    notAuthenticatedDescription: 'Bitte melden Sie sich an, um fortzufahren',
+    userNotFound: 'Benutzer nicht gefunden',
+    userNotFoundDescription: 'Benutzer mit der angegebenen ID existiert nicht'
+  },
+  user: {
+    profile: {
+      title: 'Profil',
+      information: 'Profilinformationen',
+      statistics: 'Statistiken',
+      actions: 'Aktionen',
+      editProfile: 'Profil bearbeiten',
+      totalQuizzes: 'Gesamte Quiz',
+      completedQuizzes: 'Abgeschlossen',
+      averageScore: 'Durchschnittspunktzahl',
+      registeredAt: 'Registriert',
+      noName: 'Kein Name'
     }
   }
 } 

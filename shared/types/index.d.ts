@@ -100,13 +100,13 @@ declare global {
   interface Test {
     id: string
     title: string
-    description: string
+    description?: string
     image?: string
     deadline?: string
-    timeLimit: number
-    randomizeQuestions: boolean
-    randomizeAnswers: boolean
-    difficultyDistribution: {
+    timeLimit?: number
+    randomizeQuestions?: boolean
+    randomizeAnswers?: boolean
+    difficultyDistribution?: {
       easy: number
       medium: number
       hard: number
@@ -117,10 +117,93 @@ declare global {
       questionId: string
       sectionId: string
     }>
-    authorId: string // Только ID автора
-    tags: string[] // Массив тегов
+    authorId?: string // Только ID автора
+    tags?: string[] // Массив тегов
+    createdAt?: string
+    updatedAt?: string
+  }
+
+  interface UserAnswer {
+    questionId: string
+    answerIds: string[]
+  }
+
+  interface PassedTest {
+    id: string
+    testId: string
+    userId: string
+    status: 'in_progress' | 'completed' | 'cancelled'
+    startTime: string
+    endTime?: string
+    timeSpent: number // в секундах
+    userAnswers: Record<string, UserAnswer>
+    totalScore: number
+    maxScore: number
+    percentage: number
+    isPassed: boolean
     createdAt: string
     updatedAt: string
+  }
+
+  interface TestResult {
+    id: string
+    testId: string
+    userId: string
+    totalPoints: number
+    maxPoints: number
+    percentage: number
+    isPassed: boolean
+    timeSpent: number
+    completedAt: string
+  }
+
+  interface TestSearchFilters {
+    search?: string
+    tags?: string[]
+    difficulty?: 'easy' | 'medium' | 'hard'
+    authorId?: string
+    limit?: number
+    offset?: number
+  }
+
+  interface TestSearchResponse {
+    success: boolean
+    data?: Test[]
+    total?: number
+    error?: string
+    message?: string
+  }
+
+  interface PassedTestApiResponse {
+    success: boolean
+    data?: PassedTest
+    error?: string
+    message?: string
+  }
+
+  interface PassedTestListApiResponse {
+    success: boolean
+    data?: PassedTest[]
+    error?: string
+    message?: string
+  }
+
+  interface TestStatistics {
+    testId: string
+    totalAttempts: number
+    passedAttempts: number
+    averageScore: number
+    averageTime: number
+    bestScore: number
+    worstScore: number
+    completionRate: number
+  }
+
+  interface TestStatisticsApiResponse {
+    success: boolean
+    data?: TestStatistics
+    error?: string
+    message?: string
   }
 
   interface TestApiResponse {
