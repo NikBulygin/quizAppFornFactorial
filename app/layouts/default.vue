@@ -31,6 +31,13 @@
               >
                 {{ t('navigation.myTests') }}
               </NuxtLink>
+              <NuxtLink
+                to="/docs"
+                class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                active-class="text-primary-600 dark:text-primary-400 font-medium"
+              >
+                {{ t('navigation.apiDocs') }}
+              </NuxtLink>
             </nav>
           </div>
           

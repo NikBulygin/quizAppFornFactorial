@@ -2,6 +2,62 @@ import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 import type { ServiceAccount } from 'firebase-admin'
 
+/**
+ * Search for tests
+ * @swagger
+ * /api/test/search:
+ *   get:
+ *     summary: Search for tests
+ *     description: Search for tests based on various criteria including title, description, tags, and difficulty
+ *     tags: [Tests]
+ *     parameters:
+ *       - name: search
+ *         in: query
+ *         description: Search term for title, description, or tags
+ *         schema:
+ *           type: string
+ *       - name: tags
+ *         in: query
+ *         description: Comma-separated list of tags
+ *         schema:
+ *           type: string
+ *       - name: difficulty
+ *         in: query
+ *         description: Filter by difficulty
+ *         schema:
+ *           type: string
+ *           enum: [easy, medium, hard]
+ *       - name: limit
+ *         in: query
+ *         description: Number of results to return
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *       - name: offset
+ *         in: query
+ *         description: Number of results to skip
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *     responses:
+ *       200:
+ *         description: Search results
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Test'
+ *                 total:
+ *                   type: integer
+ *                 message:
+ *                   type: string
+ */
 export default defineEventHandler(async (event): Promise<TestSearchResponse> => {
   const config = useRuntimeConfig()
   const query = getQuery(event)

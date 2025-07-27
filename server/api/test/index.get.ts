@@ -2,6 +2,38 @@ import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 import type { ServiceAccount } from 'firebase-admin'
 
+/**
+ * Get all tests
+ * @swagger
+ * /api/test:
+ *   get:
+ *     summary: Get all tests
+ *     description: Retrieve all available tests with their questions and sections
+ *     tags: [Tests]
+ *     parameters:
+ *       - name: test
+ *         in: query
+ *         description: Enable test mode
+ *         schema:
+ *           type: string
+ *           enum: [true]
+ *     responses:
+ *       200:
+ *         description: Tests retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Test'
+ *                 message:
+ *                   type: string
+ */
 export default defineEventHandler(async (event): Promise<TestListApiResponse> => {
   const config = useRuntimeConfig()
   const query = getQuery(event)
@@ -43,8 +75,8 @@ export default defineEventHandler(async (event): Promise<TestListApiResponse> =>
 
     const db = getFirestore()
     const testsSnapshot = await db.collection('tests').get()
-
     const tests: Test[] = []
+
     for (const doc of testsSnapshot.docs) {
       const testData = doc.data() as Test
       
@@ -84,8 +116,6 @@ export default defineEventHandler(async (event): Promise<TestListApiResponse> =>
     }
 
   } catch (error) {
-    
-    
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to retrieve tests'

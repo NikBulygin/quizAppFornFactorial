@@ -1,5 +1,5 @@
 export default defineEventHandler((event) => {
-  const publicPaths = ['/', '/login', '/storybook', '/storybook/']
+  const publicPaths = ['/', '/login', '/storybook', '/storybook/', '/docs', '/docs/']
   const path = event.path || event.node.req.url
   
   const isPublicPath = publicPaths.some(publicPath => {

@@ -1,7 +1,7 @@
 export default defineNuxtRouteMiddleware((to) => {
   const { loggedIn, ready } = useUserSession()
   
-  const publicPaths = ['/', '/login', '/storybook', '/storybook/']
+  const publicPaths = ['/', '/login', '/storybook', '/storybook/', '/docs', '/docs/']
   
   const isPublicPath = publicPaths.some(path => {
     if (path === '/') {

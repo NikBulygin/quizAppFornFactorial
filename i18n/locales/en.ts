@@ -141,7 +141,8 @@ export default {
     home: 'Home',
     findTests: 'Find Tests',
     myTests: 'My Tests',
-    back: 'Back'
+    back: 'Back',
+    apiDocs: 'API Documentation'
   },
   myTests: {
     title: 'My Tests',
@@ -153,7 +154,8 @@ export default {
     status: {
       inProgress: 'In progress',
       completed: 'Completed',
-      cancelled: 'Cancelled'
+      cancelled: 'Cancelled',
+      created: 'Created'
     },
     noTests: 'No tests found',
     noTestsDescription: 'You don\'t have any passed tests yet. Find interesting tests and start taking them!',

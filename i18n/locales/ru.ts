@@ -134,7 +134,9 @@ export default {
   navigation: {
     home: 'Главная',
     findTests: 'Найти тесты',
-    myTests: 'Мои тесты'
+    myTests: 'Мои тесты',
+    back: 'Назад',
+    apiDocs: 'API Документация'
   },
   test: {
     edit: {

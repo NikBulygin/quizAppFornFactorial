@@ -2,6 +2,86 @@ import { initializeApp, getApps, cert } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 import type { ServiceAccount } from 'firebase-admin'
 
+/**
+ * Create a new test
+ * @swagger
+ * /api/test:
+ *   post:
+ *     summary: Create a new test
+ *     description: Create a new test in the database with questions and sections
+ *     tags: [Tests]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [title, description, authorId]
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Test title
+ *               description:
+ *                 type: string
+ *                 description: Test description
+ *               image:
+ *                 type: string
+ *                 description: Test image URL
+ *               deadline:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Test deadline
+ *               timeLimit:
+ *                 type: integer
+ *                 description: Time limit in minutes
+ *               randomizeQuestions:
+ *                 type: boolean
+ *                 description: Whether to randomize question order
+ *               randomizeAnswers:
+ *                 type: boolean
+ *                 description: Whether to randomize answer order
+ *               difficultyDistribution:
+ *                 type: object
+ *                 properties:
+ *                   easy:
+ *                     type: integer
+ *                   medium:
+ *                     type: integer
+ *                   hard:
+ *                     type: integer
+ *               sections:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/TestSection'
+ *               questions:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/TestQuestion'
+ *               authorId:
+ *                 type: string
+ *                 description: ID of the test author
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Test tags
+ *     responses:
+ *       200:
+ *         description: Test created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Test'
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Bad request - missing required fields
+ */
 export default defineEventHandler(async (event): Promise<TestApiResponse> => {
   const config = useRuntimeConfig()
   const body = await readBody(event)

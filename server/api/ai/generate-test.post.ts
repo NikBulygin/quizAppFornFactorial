@@ -18,6 +18,69 @@ interface GenerateTestResponse {
   message?: string
 }
 
+/**
+ * Generate a test using AI
+ * @swagger
+ * /api/ai/generate-test:
+ *   post:
+ *     summary: Generate a test using AI
+ *     description: Use Google Generative AI (Gemini 1.5 Flash) to generate a complete test based on user specifications
+ *     tags: [AI]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [topic]
+ *             properties:
+ *               topic:
+ *                 type: string
+ *                 description: Main topic for the test
+ *               description:
+ *                 type: string
+ *                 description: Additional test description
+ *               easyQuestions:
+ *                 type: integer
+ *                 description: Number of easy questions
+ *                 default: 3
+ *               mediumQuestions:
+ *                 type: integer
+ *                 description: Number of medium questions
+ *                 default: 5
+ *               hardQuestions:
+ *                 type: integer
+ *                 description: Number of hard questions
+ *                 default: 2
+ *               timeLimit:
+ *                 type: integer
+ *                 description: Time limit in minutes
+ *                 default: 60
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Tags for the test
+ *               additionalPrompts:
+ *                 type: string
+ *                 description: Additional requirements for the AI
+ *     responses:
+ *       200:
+ *         description: Test generated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Test'
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Bad request - missing topic or invalid parameters
+ */
 export default defineEventHandler(async (event): Promise<GenerateTestResponse> => {
   try {
     const config = useRuntimeConfig()

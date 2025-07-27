@@ -113,6 +113,26 @@
           >
             {{ t('aiTestGenerator.title') }}
           </UButton>
+
+          <UButton
+            to="/docs"
+            variant="ghost"
+            size="lg"
+            class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300"
+            icon="i-heroicons-code-bracket"
+          >
+            {{ t('navigation.apiDocs') }}
+          </UButton>
+
+          <UButton
+            to="/storybook"
+            variant="ghost"
+            size="lg"
+            class="text-green-600 dark:text-green-400 hover:text-green-900 dark:hover:text-green-300"
+            icon="i-heroicons-paint-brush"
+          >
+            Storybook
+          </UButton>
         </div>
       </div>
     </div>
