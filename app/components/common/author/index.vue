@@ -53,13 +53,13 @@
             <UIcon name="i-simple-icons-linkedin" class="w-8 h-8 text-blue-600" />
             <span class="text-lg font-medium">LinkedIn</span>
           </div>
-          <span class="text-gray-700 dark:text-gray-300">Bulygin_Niktia</span>
+          <span class="text-gray-700 dark:text-gray-300">nikbulygin</span>
           <UButton
             :label="t('layout.author.copy')"
             variant="outline"
             size="sm"
             icon="i-heroicons-clipboard-document"
-            @click="copyToClipboard('Bulygin_Niktia')"
+            @click="copyToClipboard('nikbulygin')"
           />
         </div>
 
@@ -69,13 +69,13 @@
             <UIcon name="i-simple-icons-github" class="w-8 h-8 text-gray-800 dark:text-gray-200" />
             <span class="text-lg font-medium">GitHub</span>
           </div>
-          <span class="text-gray-700 dark:text-gray-300">BNik_ssh</span>
+          <span class="text-gray-700 dark:text-gray-300">NikBulygin</span>
           <UButton
             :label="t('layout.author.copy')"
             variant="outline"
             size="sm"
             icon="i-heroicons-clipboard-document"
-            @click="copyToClipboard('BNik_ssh')"
+            @click="copyToClipboard('https://github.com/NikBulygin')"
           />
         </div>
       </div>
